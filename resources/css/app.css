@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+* {
+    font-family: "Helvetica", Arial, Roboto;
+}
+
+[x-cloak] { display: none !important; }
+
+::-webkit-scrollbar {
+    width:0px;
+}
+
+::-webkit-scrollbar-track {
+    background:none;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #1F2937;
+    border-radius: 5px;
+}
+
+@layer utilities {
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+   /* Hide scrollbar for IE, Edge and Firefox */
+    .no-scrollbar {
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
+  }
+}
