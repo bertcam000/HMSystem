@@ -145,7 +145,7 @@
                 </div>
             </a>
             
-            <a wire:navigate href="/rooms" class=" px-3 py-3    {{ request()->is('schedules') ? 'bg-[#f8fcfc] text-black rounded-l-full' : '' }} rounded-l-full hover:bg-[#f8fcfc] hover:text-black" x-data="{dropdown1:false}">
+            <a wire:navigate href="/rooms" class=" px-3 py-3    {{ request()->is('rooms') ? 'bg-[#f8fcfc] text-black rounded-l-full' : '' }} rounded-l-full hover:bg-[#f8fcfc] hover:text-black" x-data="{dropdown1:false}">
                 <div class="flex justify-between items-center ">
                     <div class=" flex items-center gap-4 px-2">
                         <x-icon name="building-office" />

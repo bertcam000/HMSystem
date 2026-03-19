@@ -43,7 +43,7 @@
                 </div>
                 <div>
                     <div class="text-gray-500 text-sm">Total Revenue</div>
-                    <p class="text-2xl font-bold">$1,250</p>
+                    <p class="text-2xl font-bold">₱ 1,250</p>
                     <p class="text-gray-400 text-xs">all bookings</p>
                 </div>
             </div>
@@ -152,7 +152,7 @@
                 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
                 <div class="bg-white border border-gray-300/60 rounded-xl p-5">
                     <div class="w-full text-center">STATUS</div>
-                    <canvas class=" " id="myChart"></canvas>
+                    <canvas class=" " id="myChart2"></canvas>
                 </div>
                 {{-- chart --}}
             </div>
@@ -163,6 +163,36 @@
       
       new Chart(ctx, {
         type: 'bar',
+        data: {
+          labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+          datasets: [{
+            label: 'Sample',
+            data: [12, 19, 6, 5, 8, 10],
+            backgroundColor:[
+              'rgba(255, 99, 132)',
+              'rgba(54, 162, 235)',
+              'rgba(255, 159, 64)',
+                'rgba(255, 205, 86)',
+                'rgba(75, 192, 192)',
+                'rgba(153, 102, 255)'
+          ],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          aspectRatio: 2,
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+    });
+
+    const ctx2 = document.getElementById('myChart2');
+      
+      new Chart(ctx2, {
+        type: 'pie',
         data: {
           labels: ['January', 'February', 'March', 'April', 'May', 'June'],
           datasets: [{

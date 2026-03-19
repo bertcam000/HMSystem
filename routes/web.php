@@ -15,7 +15,7 @@ Route::view('profile', 'profile')
 // Dashboard
 Route::view('dashboard', 'pages.dashboard.index');
 Route::view('bookings', 'pages.booking.index');
-Route::view('rooms', 'pages.rooms.index');
+Route::view('rooms', 'pages.room.index');
 Route::view('guests', 'pages.guest.index');
 Route::view('housekeeping', 'pages.housekeeping.index');
 Route::view('invoices', 'pages.invoices.index');
