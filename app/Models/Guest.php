@@ -6,5 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Guest extends Model
 {
-    //
+    protected $guarded = ['id'];
+
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class);
+    }
 }

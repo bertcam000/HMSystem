@@ -1,5 +1,9 @@
 <x-layouts.layout>
     
+    @if (session('success'))
+        <x-notification :message="session('success')" type="success" />
+    @endif
+    
     <section class="space-y-7 p-3 rounded-xl" x-data="{ addGuest: false }">
 
         <div class="flex justify-between items-center">
@@ -16,18 +20,12 @@
         <!-- Current asset list -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
           <div class="p-4 border-b border-gray-200 flex items-center justify-between">
-            <div>
-              <button onclick="window.print()" class="bg-primary text-white px-3 py-2 shadow-sm rounded text-sm">Print</button>
-            </div>
-            <form action="/room" method="GET" class="flex justify-between items-center w-full">
-              <select onchange="this.form.submit()" name="pages" id="rowsPerPage" class="text-sm border border-gray-300 rounded px-3 w-36 py-2 shadow-sm mx-3 lg:w-[60px]">
-                <option value="10" {{ request('pages') == '10' ? 'selected' : '' }} selected>10</option>
-                <option value="25" {{ request('pages') == '25' ? 'selected' : '' }}>25</option>
-                <option value="50" {{ request('pages') == '50' ? 'selected' : '' }}>50</option>
-              </select>
+            
+            <form action="/guests" method="GET" class="flex justify-between items-center w-full">
+              
                 <div class="flex items-center gap-3">
-                    <x-input icon="magnifying-glass" onchange="this.form.submit()" type="text" value="{{ request('room_number') }}" id="room_number" name="room_number" placeholder="Search room number..." class=""/>
-                    <select onchange="this.form.submit()" name="room_type_id" id="room_type_id" class="text-sm border border-gray-300 rounded-md px-3 w-36 py-2 shadow-sm">
+                    <x-input icon="magnifying-glass" onchange="this.form.submit()" type="text" value="{{ request('search') }}" id="search" name="search" placeholder="Search room number..." class="w-full lg:w-[450px]"/>
+                    {{-- <select onchange="this.form.submit()" name="room_type_id" id="room_type_id" class="text-sm border border-gray-300 rounded-md px-3 w-36 py-2 shadow-sm">
                         <option value="" {{ request('room_type_id') ? '' : 'selected' }}>All Types</option>
                         <option value=""></option>
                     </select>
@@ -38,10 +36,10 @@
                         <option value="Reserved" {{ request('status') == 'Reserved' ? 'selected' : '' }}>Reserved</option>
                         <option value="Cleaning" {{ request('status') == 'Cleaning' ? 'selected' : '' }}>Cleaning</option>
                         <option value="Maintenance" {{ request('status') == 'Maintenance' ? 'selected' : '' }}>Maintenance</option>
-                    </select>
-                    <button class="bg-primary text-white px-3 py-2 shadow-sm rounded text-sm">Search</button>
+                    </select> --}}
                     
                 </div>
+                <button class="bg-primary text-white px-3 py-2 shadow-sm rounded text-sm">Search</button>
             </form>
           </div>
 
@@ -54,28 +52,30 @@
                           <th scope="col" class="px-6 py-1 font-semibold">CONTACT</th>
                           <th scope="col" class="px-6 py-1 font-semibold">NATIONALITY</th>
                           <th scope="col" class="px-6 py-1 font-semibold">IDENTIFICATION</th>
-                          <th scope="col" class="px-6 py-1 font-semibold no-print">TOTAL SPENT</th>
+                          <th scope="col" class="px-6 py-1 font-semibold">NOTES</th>
                           <th scope="col" class="px-6 py-1 font-semibold no-print">ACTION</th>
                       </tr>
                   </thead>
                   <tbody>
                         
-                    
+                    @forelse ($guests as $guest)
+                 
                       <tr class="bg-neutral-primary border-b border-default hover:bg-gray-50" x-data="{ open: false, dl: false }">
                         <td class="px-6 py-3">
-                            <h1 class=" font-medium">John Snow</h1>
-                            <p class="text-gray-500 text-sm">brgy talipapa quezon city</p>
+                            <h1 class=" font-medium">{{ $guest->first_name . ' ' . $guest->last_name}}</h1>
+                            <p class="text-gray-500 text-sm">{{ Str::limit($guest->address, 50) }}</p>
                         </td>
                         <td class="px-6 py-3">
-                            <h1 class="text-gray-700">johnsnow@gmail.com</h1>
-                            <p class="text-gray-500 text-sm">09234521231</p>
+                            <h1 class="text-gray-700">{{ $guest->email }}</h1>
+                            <p class="text-gray-500 text-sm">{{ $guest->phone }}</p>
                         </td>
-                        <td class="px-6 py-3">Filipino</td>
+                        <td class="px-6 py-3">{{ $guest->nationality }}</td>
+                        
                         <td class="px-6 py-3">
-                            <p class="text-gray-500">Passport</p>
-                            <h1 class="text-gray-500 text-sms">1234567890</h1>
+                            <p class="text-gray-500">{{ $guest->id_type }}</p>
+                            <h1 class="text-gray-500 text-sms">{{ $guest->id_number }}</h1>
                         </td>
-                        <td class="px-6 py-3 font-semibold">₱5,000.00</td>
+                        <td class="px-6 py-3 text-gray-500">{{ $guest->notes ?? 'None' }}</td>
                         <td class="px-6 py-3 relative no-print">
                           <button @click="open = !open" class="px-3 py-1 rounded-md hover:bg-gray-100">
                               ⋮
@@ -123,12 +123,14 @@
                           
                         </td>
                       </tr>
-                      {{-- @empty
+                             
+                    @empty
                         <tr>
                           <td colspan="7" class="px-6 py-4 text-center text-gray-500">
                               No Data Found
                           </td>
-                      </tr> --}}
+                      </tr>
+                    @endforelse
                       
                   </tbody>
                 </table>

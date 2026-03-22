@@ -4,36 +4,37 @@
         <x-notification :message="session('success')" type="success" />
     @endif
     
-    <section class="space-y-7 p-3 rounded-xl" x-data="{ addBooking: false }">
+    <section class="space-y-7 p-3 rounded-xl" x-data="{ addGuest: false }">
 
         <div class="flex justify-between items-center">
             <div>
-                <h1 class="text-2xl font-bold text-gray-800 ">Bookings</h1>
-                <p class="text-gray-600">6 total bookings</p>
+                <h1 class="text-2xl font-bold text-gray-800 ">Rooms</h1>
+                <p class="text-gray-600">6 total rooms</p>
             </div>
-            <a href="/book" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primaryDark transition-colors text-sm font-medium">
-            + Add Booking
-            </a>
+            <button @click="addGuest = true" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primaryDark transition-colors text-sm font-medium">
+            + Add Room
+            </button>
         </div>
         
 
         <!-- Current asset list -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
           <div class="p-4 border-b border-gray-200 flex items-center justify-between">
-            <div>
-              <button onclick="window.print()" class="bg-primary text-white px-3 py-2 shadow-sm rounded text-sm">Print</button>
-            </div>
-            <form action="/room" method="GET" class="flex justify-between items-center w-full">
-              <select onchange="this.form.submit()" name="pages" id="rowsPerPage" class="text-sm border border-gray-300 rounded px-3 w-36 py-2 shadow-sm mx-3 lg:w-[60px]">
-                <option value="10" {{ request('pages') == '10' ? 'selected' : '' }} selected>10</option>
-                <option value="25" {{ request('pages') == '25' ? 'selected' : '' }}>25</option>
-                <option value="50" {{ request('pages') == '50' ? 'selected' : '' }}>50</option>
-              </select>
+            
+            <form action="/rooms" method="GET" class="flex justify-between items-center w-full">
+              
                 <div class="flex items-center gap-3">
-                    <x-input icon="magnifying-glass" onchange="this.form.submit()" type="text" value="{{ request('room_number') }}" id="room_number" name="room_number" placeholder="Search room number..." class=""/>
+                    <x-input icon="magnifying-glass" onchange="this.form.submit()" type="text" value="{{ request('search') }}" id="search" name="search" placeholder="Search room number..." class="w-full lg:w-[450px]"/>
                     <select onchange="this.form.submit()" name="room_type_id" id="room_type_id" class="text-sm border border-gray-300 rounded-md px-3 w-36 py-2 shadow-sm">
                         <option value="" {{ request('room_type_id') ? '' : 'selected' }}>All Types</option>
-                        <option value=""></option>
+                        @foreach ($roomTypes as $roomType)
+                            <option
+                                value="{{ $roomType->id }}"
+                                {{ request('room_type_id') == $roomType->id ? 'selected' : '' }}
+                            >
+                                {{ $roomType->name }}
+                            </option>
+                        @endforeach
                     </select>
                     <select onchange="this.form.submit()" name="status" id="status" wire:model.live="status" class="text-sm border border-gray-300 rounded px-3 w-36 py-2 shadow-sm">
                         <option value="" {{ request('status') ? '' : 'selected' }}>All Statuses</option>
@@ -43,9 +44,9 @@
                         <option value="Cleaning" {{ request('status') == 'Cleaning' ? 'selected' : '' }}>Cleaning</option>
                         <option value="Maintenance" {{ request('status') == 'Maintenance' ? 'selected' : '' }}>Maintenance</option>
                     </select>
-                    <button class="bg-primary text-white px-3 py-2 shadow-sm rounded text-sm">Search</button>
                     
                 </div>
+                <button class="bg-primary text-white px-3 py-2 shadow-sm rounded text-sm">Search</button>
             </form>
           </div>
 
@@ -54,36 +55,34 @@
                   <thead class="text-sm text-body bg-neutral-secondary-soft border-b rounded-base border-default">
                     <div class="text-end px-5 py-2  print-date">{{ now()->format('M d, Y') }}</div>
                       <tr class=" text-gray-600 text-left">
-                          <th scope="col" class="px-6 py-1 font-semibold">BOOKING #</th>
-                          <th scope="col" class="px-6 py-1 font-semibold">GUEST</th>
-                          <th scope="col" class="px-6 py-1 font-semibold">ROOM</th>
-                          <th scope="col" class="px-6 py-1 font-semibold">CHECK-IN</th>
-                          <th scope="col" class="px-6 py-1 font-semibold">CHECK-OUT</th>
-                          <th scope="col" class="px-6 py-1 font-semibold">TOTAL AMOUNT</th>
+                          <th scope="col" class="px-6 py-1 font-semibold">ROOM NUMBER</th>
+                          <th scope="col" class="px-6 py-1 font-semibold">FLOOR</th>
+                          <th scope="col" class="px-6 py-1 font-semibold">ROOM TYPE</th>
+                          <th scope="col" class="px-6 py-1 font-semibold">BED TYPE</th>
                           <th scope="col" class="px-6 py-1 font-semibold">STATUS</th>
                           <th scope="col" class="px-6 py-1 font-semibold no-print">ACTION</th>
                       </tr>
                   </thead>
                   <tbody>
                         
-                    @forelse ($bookings as $booking)
+                    @forelse ($rooms as $room)
+                        
                       <tr class="bg-neutral-primary border-b border-default hover:bg-gray-50" x-data="{ open: false, dl: false }">
-                        <th scope="row" class="px-6 py-4 font-medium text-heading whitespace-nowrap">{{ $booking->booking_code }}</th>
-                        <td class="px-6 py-4">
-                            <h1 class=" font-medium">{{ $booking->guest->first_name . ' ' . $booking->guest->last_name }}</h1>
-                            <p class="text-gray-500 text-sm">{{ $booking->guest->email }}</p>
+                        <td class="px-6 py-3">
+                            <h1 class=" font-medium">Room {{ $room->room_number }}</h1>
+                            <p class="text-gray-500 text-sm"></p>
                         </td>
-                        <td class="px-6 py-4">
-                            Room
-                            @foreach ($booking->rooms as $room)
-                                {{ $room->room_number }} 
-                            @endforeach
+                        <td class="px-6 py-3">
+                            {{ Illuminate\Support\Number::ordinal($room->floor) }}
                         </td>
-                        <td class="px-6 py-4 text-gray-500">{{ $booking->check_in_date->format('F d, Y') }}</td>
-                        <td class="px-6 py-4 text-gray-500">{{ $booking->check_out_date->format('F d, Y') }}</td>
-                        <td class="px-6 py-4 font-bold">₱ {{ $booking->total_price }}</td>
-                        <td class="px-6 py-4">{{ $booking->status }}</td>
-                        <td class="px-6 py-4 relative no-print">
+                        <td class="px-6 py-3">
+                            {{ $room->roomType->name }}
+                        </td>
+                        <td class="px-6 py-3">{{ $room->roomType->bed_type }}</td>
+                        
+                        
+                        <td class="px-6 py-3 text-gray-500">{{ $room->status }}</td>
+                        <td class="px-6 py-3 relative no-print">
                           <button @click="open = !open" class="px-3 py-1 rounded-md hover:bg-gray-100">
                               ⋮
                           </button>
@@ -91,7 +90,7 @@
                           <div x-show="open" x-cloak @click.away="open = false" x-transition class="absolute right-14 top-3 py-2 px-3 flex justify-center items-center gap-2 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
                               <button @click="dl = true" class="text-red-500 hover:bg-gray-200 hover:rounded-lg px-2">Delete</button>
                               <a href="/asset/update/3" class=" hover:bg-gray-200 hover:rounded-lg px-2">Edit</a>
-                              <a href="/booking/result/{{ $booking->id }}" class="text-green-500 hover:rounded-lg hover:bg-gray-200 px-2">View</a>
+                              <a href="/inventory/result/3" class="text-green-500 hover:rounded-lg hover:bg-gray-200 px-2">View</a>
                           </div>
 
                           <div x-show="dl" x-cloak
@@ -130,13 +129,14 @@
                           
                         </td>
                       </tr>
-                      @empty
+                             
+                    @empty
                         <tr>
                           <td colspan="7" class="px-6 py-4 text-center text-gray-500">
                               No Data Found
                           </td>
                       </tr>
-                      @endforelse
+                    @endforelse
                       
                   </tbody>
                 </table>
@@ -150,67 +150,10 @@
         </div>
 
         {{-- MODAl --}}
-        <div x-show="addBooking" x-cloak class="px-2 md:px-0 transition-all duration-300 flex h-screen w-full bg-black/20 fixed -top-7 left-0 z-50  justify-center items-center">
-            <livewire:booking.create/>
+        <div x-show="addGuest" x-cloak class="px-2 md:px-0 transition-all duration-300 flex h-screen w-full bg-black/20 fixed -top-7 left-0 z-50  justify-center items-center">
+            <livewire:room.create-room/>
         </div>
     </section>
 
-<style>
-  .print-date {
-      display: none;
-  }
-  @media print {
 
-      body * {
-          visibility: hidden;
-          font-size: 10px !important;
-      }
-
-      .print-date {
-          display: block;
-          font-size: 12px;
-      }
-
-      #print-area,
-      #print-area * {
-          visibility: visible;
-      }
-
-      #print-area {
-          position: absolute;
-          left: 0;
-          top: 0;
-          width: 100%;
-      }
-
-      .no-print {
-          display: none !important;
-      }
-
-      table {
-          border-collapse: collapse;
-      }
-
-      th, td {
-          
-          border: 1px solid #000;
-          padding: 3px 4px !important;   
-          line-height: 1.1 !important;   
-          vertical-align: top !important;
-      }
-
-      tr {
-          height: auto !important;
-      }
-
-      td br {
-          line-height: 1 !important;
-      }
-
-      th {
-          background: #f3f3f3 !important;
-          color: #000 !important;
-      }
-  }
-</style>
 </x-layouts.layout>

@@ -13,6 +13,16 @@ return new class extends Migration
     {
         Schema::create('guests', function (Blueprint $table) {
             $table->id();
+            $table->string('first_name');
+            $table->string('last_name');
+            $table->string('email')->nullable();;
+            $table->string('phone')->nullable();;
+            $table->string('address');
+            $table->string('id_type');
+            $table->string('id_number');
+            $table->string('nationality');
+            $table->date('date_of_birth');
+            $table->text('notes')->nullable();
             $table->timestamps();
         });
     }

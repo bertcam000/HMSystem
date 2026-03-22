@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\RoomType;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,12 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('rooms', function (Blueprint $table) {
+        Schema::create('features', function (Blueprint $table) {
             $table->id();
-            $table->string('room_number')->unique();
-            $table->foreignIdFor(RoomType::class)->constrained()->cascadeOnDelete();
-            $table->integer('floor');
-            $table->string('status')->default('Available');
+            $table->string('name');
             $table->timestamps();
         });
     }
@@ -27,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('rooms');
+        Schema::dropIfExists('features');
     }
 };

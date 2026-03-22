@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Guest;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,6 +14,21 @@ return new class extends Migration
     {
         Schema::create('bookings', function (Blueprint $table) {
             $table->id();
+            $table->string('booking_code')->unique();
+            $table->foreignIdFor(Guest::class)->constrained()->cascadeOnDelete();
+            $table->string('source')->nullable();
+            $table->string('childen')->nullable();
+            $table->string('adult')->nullable();
+            $table->date('check_in_date');
+            $table->date('check_out_date');
+            $table->decimal('tax', 10, 2)->default(0);
+            $table->decimal('service_charge', 10, 2)->default(0);
+            $table->decimal('subtotal', 10, 2)->default(0);
+            $table->decimal('total_price', 10, 2)->default(0);
+            $table->decimal('paid_amount', 10, 2)->default(0);
+            $table->decimal('balance', 10, 2)->default(0);
+            $table->string('payment_status')->default('unpaid');
+            $table->string('status')->default('pending');
             $table->timestamps();
         });
     }
