@@ -35,9 +35,11 @@ Route::view('events', 'pages.event.index');
 
 // booking
 Route::get('/bookings', [BookingController::class, 'index']);
-Route::get('/booking/result/{booking}', [BookingController::class, 'show']);
 Route::view('/show-booking', 'pages.booking.show');
 Route::view('/book', 'pages.booking.booking');
+Route::get('/booking/result/{booking}', [BookingController::class, 'show']);
+Route::get('/booking/check-in/{booking}', [BookingController::class, 'checkIn']);
+Route::get('/booking/check-out/{booking}', [BookingController::class, 'checkOut']);
 
 // 
 Route::get('/guest/search', function (\Illuminate\Http\Request $request) {

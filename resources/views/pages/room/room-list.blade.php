@@ -53,13 +53,12 @@
           <div id="print-area" class="relative overflow-x-auto bg-neutral-primary-soft shadow-xs rounded-base ">
               <table id="qr-print-area" class="w-full text-sm text-left rtl:text-right text-body">
                   <thead class="text-sm text-body bg-neutral-secondary-soft border-b rounded-base border-default">
-                    <div class="text-end px-5 py-2  print-date">{{ now()->format('M d, Y') }}</div>
                       <tr class=" text-gray-600 text-left">
                           <th scope="col" class="px-6 py-1 font-semibold">ROOM NUMBER</th>
                           <th scope="col" class="px-6 py-1 font-semibold">FLOOR</th>
                           <th scope="col" class="px-6 py-1 font-semibold">ROOM TYPE</th>
                           <th scope="col" class="px-6 py-1 font-semibold">BED TYPE</th>
-                          <th scope="col" class="px-6 py-1 font-semibold">STATUS</th>
+                          <th scope="col" class="px-6 py-1 font-semibold text-center">STATUS</th>
                           <th scope="col" class="px-6 py-1 font-semibold no-print">ACTION</th>
                       </tr>
                   </thead>
@@ -81,7 +80,9 @@
                         <td class="px-6 py-3">{{ $room->roomType->bed_type }}</td>
                         
                         
-                        <td class="px-6 py-3 text-gray-500">{{ $room->status }}</td>
+                        <td class="px-6 py-3 text-gray-500 ">
+                            <p class="{{ $room->status === 'Available' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }} text-center rounded-full">{{ $room->status }}</p>
+                        </td>
                         <td class="px-6 py-3 relative no-print">
                           <button @click="open = !open" class="px-3 py-1 rounded-md hover:bg-gray-100">
                               ⋮

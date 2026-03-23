@@ -53,7 +53,7 @@
                           <th scope="col" class="px-6 py-1 font-semibold">NATIONALITY</th>
                           <th scope="col" class="px-6 py-1 font-semibold">IDENTIFICATION</th>
                           <th scope="col" class="px-6 py-1 font-semibold">NOTES</th>
-                          <th scope="col" class="px-6 py-1 font-semibold no-print">ACTION</th>
+                          {{-- <th scope="col" class="px-6 py-1 font-semibold no-print">ACTION</th> --}}
                       </tr>
                   </thead>
                   <tbody>
@@ -76,7 +76,7 @@
                             <h1 class="text-gray-500 text-sms">{{ $guest->id_number }}</h1>
                         </td>
                         <td class="px-6 py-3 text-gray-500">{{ $guest->notes ?? 'None' }}</td>
-                        <td class="px-6 py-3 relative no-print">
+                        {{-- <td class="px-6 py-3 relative no-print">
                           <button @click="open = !open" class="px-3 py-1 rounded-md hover:bg-gray-100">
                               ⋮
                           </button>
@@ -121,7 +121,7 @@
                               </div>
                           </div>
                           
-                        </td>
+                        </td> --}}
                       </tr>
                              
                     @empty

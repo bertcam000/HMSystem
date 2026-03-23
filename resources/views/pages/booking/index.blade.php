@@ -60,6 +60,7 @@
                           <th scope="col" class="px-6 py-1 font-semibold">CHECK-IN</th>
                           <th scope="col" class="px-6 py-1 font-semibold">CHECK-OUT</th>
                           <th scope="col" class="px-6 py-1 font-semibold">TOTAL AMOUNT</th>
+                          <th scope="col" class="px-6 py-1 font-semibold">BALANCE</th>
                           <th scope="col" class="px-6 py-1 font-semibold">STATUS</th>
                           <th scope="col" class="px-6 py-1 font-semibold no-print">ACTION</th>
                       </tr>
@@ -82,6 +83,7 @@
                         <td class="px-6 py-4 text-gray-500">{{ $booking->check_in_date->format('F d, Y') }}</td>
                         <td class="px-6 py-4 text-gray-500">{{ $booking->check_out_date->format('F d, Y') }}</td>
                         <td class="px-6 py-4 font-bold">₱ {{ $booking->total_price }}</td>
+                        <td class="px-6 py-4 font-bold">₱ {{ $booking->balance }}</td>
                         <td class="px-6 py-4">{{ $booking->status }}</td>
                         <td class="px-6 py-4 relative no-print">
                           <button @click="open = !open" class="px-3 py-1 rounded-md hover:bg-gray-100">
@@ -89,8 +91,8 @@
                           </button>
 
                           <div x-show="open" x-cloak @click.away="open = false" x-transition class="absolute right-14 top-3 py-2 px-3 flex justify-center items-center gap-2 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
-                              <button @click="dl = true" class="text-red-500 hover:bg-gray-200 hover:rounded-lg px-2">Delete</button>
-                              <a href="/asset/update/3" class=" hover:bg-gray-200 hover:rounded-lg px-2">Edit</a>
+                              {{-- <button @click="dl = true" class="text-red-500 hover:bg-gray-200 hover:rounded-lg px-2">Delete</button> --}}
+                              {{-- <a href="/asset/update/3" class=" hover:bg-gray-200 hover:rounded-lg px-2">Edit</a> --}}
                               <a href="/booking/result/{{ $booking->id }}" class="text-green-500 hover:rounded-lg hover:bg-gray-200 px-2">View</a>
                           </div>
 

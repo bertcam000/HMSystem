@@ -22,12 +22,18 @@ new class extends Component {
 
     public function rules()
     {
+        $currentBalance = round((float) ($this->booking->balance ?? 0), 2);
+
+        if ($currentBalance < 0.01) {
+            $currentBalance = 0.00;
+        }
+
         return [
             'amount' => [
                 'required',
                 'numeric',
                 'min:0.01',
-                'max:' . max((float) $this->booking->balance, 0.01),
+                'max:' . max($currentBalance, 0.01),
             ],
             'type' => ['required', Rule::in(['deposit', 'additional', 'full_payment', 'remaining_balance'])],
             'payment_method' => ['required', Rule::in(['cash', 'gcash', 'bank_transfer', 'card'])],
@@ -43,7 +49,7 @@ new class extends Component {
         DB::transaction(function () {
             Payment::create([
                 'booking_id' => $this->booking->id,
-                'amount' => $this->amount,
+                'amount' => round((float) $this->amount, 2),
                 'payment_method' => $this->payment_method,
                 'type' => $this->type,
                 'reference_number' => $this->reference_number ?: null,
@@ -53,19 +59,25 @@ new class extends Component {
 
             $this->booking->refresh();
 
-            $paidAmount = $this->booking->payments()->sum('amount');
-            $balance = max((float) $this->booking->total_price - (float) $paidAmount, 0);
+            $paidAmount = round((float) $this->booking->payments()->sum('amount'), 2);
+            $totalPrice = round((float) $this->booking->total_price, 2);
+            $balance = round($totalPrice - $paidAmount, 2);
+
+            if ($balance < 0.01) {
+                $balance = 0.00;
+            }
 
             $paymentStatus = 'unpaid';
 
-            if ($paidAmount > 0 && $paidAmount < $this->booking->total_price) {
+            if ($paidAmount > 0 && $paidAmount < $totalPrice) {
                 $paymentStatus = 'partial';
-            } elseif ($paidAmount >= $this->booking->total_price) {
+            } elseif ($paidAmount >= $totalPrice) {
                 $paymentStatus = 'paid';
             }
 
             $bookingStatus = $this->booking->status;
-            if ($this->booking->status === 'pending' && $paidAmount > 0) {
+
+            if ($this->booking->status === 'reserved' && $paidAmount > 0) {
                 $bookingStatus = 'confirmed';
             }
 
@@ -85,16 +97,12 @@ new class extends Component {
 
         session()->flash('success', 'Payment added successfully.');
 
-        return redirect('/booking/result/'. $this->booking->id );
-
-        $this->dispatch('close-payment-modal');
+        return redirect('/booking/result/' . $this->booking->id);
     }
 };
 ?>
 
 <form wire:submit.prevent="savePayment" class="space-y-5">
-    
-
     <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
         <div>
             <label class="mb-2 block text-sm font-medium text-slate-700">Payment Amount</label>

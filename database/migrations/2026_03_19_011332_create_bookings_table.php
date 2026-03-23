@@ -29,6 +29,8 @@ return new class extends Migration
             $table->decimal('balance', 10, 2)->default(0);
             $table->string('payment_status')->default('unpaid');
             $table->string('status')->default('pending');
+            $table->timestamp('checked_in_at')->nullable();
+            $table->timestamp('checked_out_at')->nullable();
             $table->timestamps();
         });
     }
