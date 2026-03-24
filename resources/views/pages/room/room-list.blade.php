@@ -16,6 +16,52 @@
             </button>
         </div>
         
+        {{--  --}}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
+            <div class="shadow-md flex justify-between gap-5 bg-white p-4 border border-gray-300/60 rounded-xl">
+                
+                <div>
+                    <div class="text-gray-500 text-sm">Available Room</div>
+                    <p class="text-2xl font-bold">5</p>
+                    <p class="text-gray-400 text-xs">Ready for booking</p>
+                </div>
+                <div class="bg-yellow-400 p-2 rounded-md h-10 w-10 flex items-center justify-center">
+                    <x-icon name="arrow-trending-up" class="w-5 h-5 text-white" outline />
+                </div>
+            </div>
+            <div class="shadow-md flex justify-between gap-5 bg-white p-4 border border-gray-300/60 rounded-xl">
+                <div>
+                    <div class="text-gray-500 text-sm">Reserved Rooms</div>
+                    <p class="text-2xl font-bold">10</p>
+                    <p class="text-gray-400 text-xs text-blue-400">Upcoming arrivals</p>
+                </div>
+                <div class="bg-green-500 p-2 rounded-md h-10 w-10 flex items-center justify-center">
+                    <x-icon name="key" class="w-5 h-5 text-white" outline />
+                </div>
+            </div>
+            <div class="shadow-md flex justify-between gap-5 bg-white p-4 border border-gray-300/60 rounded-xl">
+                <div>
+                    <div class="text-gray-500 text-sm">Maintenance</div>
+                    <p class="text-2xl font-bold">5</p>
+                    <p class="text-gray-400 text-xs text-orange-500">Needs to clean/check</p>
+                </div>
+                <div class="bg-blue-500 p-2 rounded-md h-10 w-10 flex items-center justify-center">
+                    <x-icon name="calendar-date-range" class="w-5 h-5 text-white" outline />
+                </div>
+            </div>
+            
+            <div class="shadow-md flex justify-between gap-5 bg-white p-4 border border-gray-300/60 rounded-xl">
+                
+                <div>
+                    <div class="text-gray-500 text-sm">Occupied Room</div>
+                    <p class="text-2xl font-bold">58</p>
+                    <p class="text-gray-400 text-xs text-red-500">Currently in use</p>
+                </div>
+                <div class="bg-red-500 p-2 rounded-md h-10 w-10 flex items-center justify-center">
+                    <x-icon name="arrow-up-on-square" class="w-5 h-5 text-white" outline />
+                </div>
+            </div>
+        </div>
 
         <!-- Current asset list -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
@@ -80,9 +126,39 @@
                         <td class="px-6 py-3">{{ $room->roomType->bed_type }}</td>
                         
                         
-                        <td class="px-6 py-3 text-gray-500 ">
+                        {{-- <td class="px-6 py-3 text-gray-500 ">
                             <p class="{{ $room->status === 'Available' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }} text-center rounded-full">{{ $room->status }}</p>
+                        </td> --}}
+
+                        @php
+                            $statusClasses = match($room->status) {
+                                'Available' => 'bg-emerald-50 text-emerald-700 ring-emerald-200',
+                                'Occupied' => 'bg-rose-50 text-rose-700 ring-rose-200',
+                                'reserved' => 'bg-sky-50 text-sky-700 ring-sky-200',
+                                'cleaning' => 'bg-violet-50 text-violet-700 ring-violet-200',
+                                'maintenance' => 'bg-amber-50 text-amber-700 ring-amber-200',
+                                default => 'bg-slate-100 text-slate-700 ring-slate-200',
+                            };
+
+                            $dotClasses = match($room->status) {
+                                'Available' => 'bg-emerald-500',
+                                'Occupied' => 'bg-rose-500',
+                                'reserved' => 'bg-sky-500',
+                                'cleaning' => 'bg-violet-500',
+                                'maintenance' => 'bg-amber-500',
+                                default => 'bg-slate-500',
+                            };
+
+                            $label = ucfirst(str_replace('_', ' ', $room->status));
+                        @endphp
+
+                        <td class="px-4 py-3">
+                            <span class="inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold ring-1 ring-inset {{ $statusClasses }}">
+                                <span class="h-2 w-2 rounded-full {{ $dotClasses }}"></span>
+                                {{ $label }}
+                            </span>
                         </td>
+                        
                         <td class="px-6 py-3 relative no-print">
                           <button @click="open = !open" class="px-3 py-1 rounded-md hover:bg-gray-100">
                               ⋮

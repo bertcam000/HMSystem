@@ -89,6 +89,10 @@ new class extends Component {
             <x-number wire:model="price" label="Room Price" placeholder="0" />
         </div>
 
+        <div>
+            <x-textarea name="description" wire:model="description" id="" class="" label="Room Description" placeholder="Type something here..."/>
+        </div>
+        
          <!-- FEATURES -->
         <div>
 

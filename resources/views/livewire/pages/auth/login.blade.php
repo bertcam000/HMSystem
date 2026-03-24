@@ -85,9 +85,9 @@ new #[Layout('components.layouts.guest-layout')] class extends Component
       </div>
 
       <div class="max-w-xl">
-        <p class="text-sm font-medium text-slate-100">Simple access for hotel operations</p>
-        <h2 class="mt-4 text-5xl font-semibold leading-tight tracking-tight text-white">
-          Clean login for a modern hospitality workspace.
+        {{-- <p class="text-sm font-medium text-slate-100"></p> --}}
+        <h2 class=" text-5xl font-semibold leading-tight tracking-tight text-white">
+          Hotel Management System
         </h2>
         <p class="mt-6 max-w-lg text-base leading-7 text-slate-100">
           Manage reservations, rooms, guest records, and payments from one calm and focused dashboard.

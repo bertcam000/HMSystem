@@ -7,54 +7,56 @@
             </div>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
-            <div class="flex gap-5 bg-white p-4 border border-gray-300/60 rounded-xl">
-                <div class="bg-green-100/80 p-2 rounded-md h-10 w-10 flex items-center justify-center">
-                    <x-icon name="key" class="w-5 h-5 text-green-900" outline />
-                </div>
+            <div class="shadow-md flex justify-between gap-5 bg-white p-4 border border-gray-300/60 rounded-xl">
                 <div>
                     <div class="text-gray-500 text-sm">Available Rooms</div>
                     <p class="text-2xl font-bold">5</p>
                     <p class="text-gray-400 text-xs">4 occupied</p>
                 </div>
-            </div>
-            <div class="flex gap-5 bg-white p-4 border border-gray-300/60 rounded-xl">
-                <div class="bg-blue-100/80 p-2 rounded-md h-10 w-10 flex items-center justify-center">
-                    <x-icon name="calendar-date-range" class="w-5 h-5 text-blue-900" outline />
+                <div class="bg-green-500 p-2 rounded-md h-10 w-10 flex items-center justify-center">
+                    <x-icon name="key" class="w-5 h-5 text-white" outline />
                 </div>
+            </div>
+            <div class="shadow-md flex justify-between gap-5 bg-white p-4 border border-gray-300/60 rounded-xl">
                 <div>
                     <div class="text-gray-500 text-sm">Today's Check-ins</div>
                     <p class="text-2xl font-bold">5</p>
                     <p class="text-gray-400 text-xs">confirmed bookings</p>
                 </div>
-            </div>
-            <div class="flex gap-5 bg-white p-4 border border-gray-300/60 rounded-xl">
-                <div class="bg-yellow-100/80 p-2 rounded-md h-10 w-10 flex items-center justify-center">
-                    <x-icon name="arrow-trending-up" class="w-5 h-5 text-yellow-900" outline />
+                <div class="bg-blue-500 p-2 rounded-md h-10 w-10 flex items-center justify-center">
+                    <x-icon name="calendar-date-range" class="w-5 h-5 text-white" outline />
                 </div>
+            </div>
+            <div class="shadow-md flex justify-between gap-5 bg-white p-4 border border-gray-300/60 rounded-xl">
+                
                 <div>
                     <div class="text-gray-500 text-sm">Todays Check-outs</div>
                     <p class="text-2xl font-bold">5</p>
                     <p class="text-gray-400 text-xs">due today</p>
                 </div>
-            </div>
-            <div class="flex gap-5 bg-white p-4 border border-gray-300/60 rounded-xl">
-                <div class="bg-violet-100/80 p-2 rounded-md h-10 w-10 flex items-center justify-center">
-                    <x-icon name="currency-dollar" class="w-5 h-5 text-violet-900" outline />
+                <div class="bg-yellow-400 p-2 rounded-md h-10 w-10 flex items-center justify-center">
+                    <x-icon name="arrow-trending-up" class="w-5 h-5 text-white" outline />
                 </div>
+            </div>
+            <div class="shadow-md flex justify-between gap-5 bg-white p-4 border border-gray-300/60 rounded-xl">
+                
                 <div>
                     <div class="text-gray-500 text-sm">Total Revenue</div>
                     <p class="text-2xl font-bold">₱ 1,250</p>
                     <p class="text-gray-400 text-xs">all bookings</p>
                 </div>
+                <div class="bg-violet-500 p-2 rounded-md h-10 w-10 flex items-center justify-center">
+                    <x-icon name="currency-dollar" class="w-5 h-5 text-white" outline />
+                </div>
             </div>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-6 gap-4 mt-4">
-            <div class="col-span-4 space-y-5">
-                <div class="bg-white border border-gray-300/60 rounded-xl p-5">
-                    <div class="w-full text-center">STATUS</div>
+            <div class=" col-span-4 space-y-5">
+                <div class="shadow-md bg-white border border-gray-300/60 rounded-xl p-5">
+                    <div class="w-full text-center text-gray-500">MONTHLY SALES</div>
                     <canvas class=" " id="myChart"></canvas>
                 </div>
-                <div class=" bg-white border border-gray-300/60 rounded-xl">
+                <div class="shadow-md bg-white border border-gray-300/60 rounded-xl">
                     <div class="flex justify-between items-center px-7 py-4 border-b border-gray-300/60">
                         <div>Recent Bookings</div>
                         <button class="text-xs text-gray-500">View All</button>
@@ -124,22 +126,18 @@
                 </div>
             </div>
             <div class="col-span-2 space-y-5">
-                <div class=" p-5 bg-white border border-gray-300/60 rounded-xl">
+                <div class="shadow-md p-5 bg-white border border-gray-300/60 rounded-xl">
                     <div>Room Status</div>
                     <div class="flex justify-between items-center mt-3">
                         <div class="text-gray-700 text-sm"> <span class="bg-green-500 w-2 h-2 rounded-full inline-block mr-2"></span> Available</div>
                         <div class="font-bold">5</div>
                     </div>
                     <div class="flex justify-between items-center mt-1">
-                        <div class="text-gray-700 text-sm"> <span class="bg-blue-500 w-2 h-2 rounded-full inline-block mr-2"></span> Available</div>
+                        <div class="text-gray-700 text-sm"> <span class="bg-blue-500 w-2 h-2 rounded-full inline-block mr-2"></span> Occupied</div>
                         <div class="font-bold">5</div>
                     </div>
                     <div class="flex justify-between items-center mt-1">
-                        <div class="text-gray-700 text-sm"> <span class="bg-purple-500 w-2 h-2 rounded-full inline-block mr-2"></span> Available</div>
-                        <div class="font-bold">5</div>
-                    </div>
-                    <div class="flex justify-between items-center mt-1">
-                        <div class="text-gray-700 text-sm"> <span class="bg-orange-500 w-2 h-2 rounded-full inline-block mr-2"></span> Available</div>
+                        <div class="text-gray-700 text-sm"> <span class="bg-purple-500 w-2 h-2 rounded-full inline-block mr-2"></span> Maintenance</div>
                         <div class="font-bold">5</div>
                     </div>
                     <hr class="mt-4">
@@ -150,7 +148,7 @@
                 </div>
                 {{-- chart --}}
                 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-                <div class="bg-white border border-gray-300/60 rounded-xl p-5">
+                <div class="shadow-md bg-white border border-gray-300/60 rounded-xl p-5">
                     <div class="w-full text-center">STATUS</div>
                     <canvas class=" " id="myChart2"></canvas>
                 </div>

@@ -16,6 +16,50 @@
             </a>
         </div>
         
+        {{--  --}}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
+            <div class="shadow-md flex justify-between gap-5 bg-white p-4 border border-gray-300/60 rounded-xl">
+                <div>
+                    <div class="text-gray-500 text-sm">Total Bookings</div>
+                    <p class="text-2xl font-bold">1,524</p>
+                    <p class="text-gray-400 text-xs text-green-500">+12% from last month</p>
+                </div>
+                <div class="bg-blue-500 p-2 rounded-md h-10 w-10 flex items-center justify-center">
+                    <x-icon name="calendar" class="w-5 h-5 text-white" outline />
+                </div>
+            </div>
+            <div class="shadow-md flex justify-between gap-5 bg-white p-4 border border-gray-300/60 rounded-xl">
+                <div>
+                    <div class="text-gray-500 text-sm">Pending Bookings</div>
+                    <p class="text-2xl font-bold">1,524</p>
+                    <p class="text-gray-400 text-xs text-orange-500">Need confirmation</p>
+                </div>
+                <div class="bg-amber-500 p-2 rounded-md h-10 w-10 flex items-center justify-center">
+                    <x-icon name="clock" class="w-5 h-5 text-white" outline />
+                </div>
+            </div>
+            <div class="shadow-md flex justify-between gap-5 bg-white p-4 border border-gray-300/60 rounded-xl">
+                <div>
+                    <div class="text-gray-500 text-sm">Checked-In Guest</div>
+                    <p class="text-2xl font-bold">23</p>
+                    <p class="text-gray-400 text-xs text-green-500">Active stays today</p>
+                </div>
+                <div class="bg-green-500 p-2 rounded-md h-10 w-10 flex items-center justify-center">
+                    <x-icon name="calendar" class="w-5 h-5 text-white" outline />
+                </div>
+            </div>
+            <div class="shadow-md flex justify-between gap-5 bg-white p-4 border border-gray-300/60 rounded-xl">
+                <div>
+                    <div class="text-gray-500 text-sm">Checked-Out Today</div>
+                    <p class="text-2xl font-bold">15</p>
+                    <p class="text-gray-400 text-xs text-red-400">Completed stays</p>
+                </div>
+                <div class="bg-red-400 p-2 rounded-md h-10 w-10 flex items-center justify-center">
+                    <x-icon name="check" class="w-5 h-5 text-white" outline />
+                </div>
+            </div>
+            
+        </div>
 
         <!-- Current asset list -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
@@ -23,7 +67,7 @@
             <div>
               <button onclick="window.print()" class="bg-primary text-white px-3 py-2 shadow-sm rounded text-sm">Print</button>
             </div>
-            <form action="/room" method="GET" class="flex justify-between items-center w-full">
+            <form action="/bookings" method="GET" class="flex justify-between items-center w-full">
               <select onchange="this.form.submit()" name="pages" id="rowsPerPage" class="text-sm border border-gray-300 rounded px-3 w-36 py-2 shadow-sm mx-3 lg:w-[60px]">
                 <option value="10" {{ request('pages') == '10' ? 'selected' : '' }} selected>10</option>
                 <option value="25" {{ request('pages') == '25' ? 'selected' : '' }}>25</option>
@@ -82,17 +126,93 @@
                         </td>
                         <td class="px-6 py-4 text-gray-500">{{ $booking->check_in_date->format('F d, Y') }}</td>
                         <td class="px-6 py-4 text-gray-500">{{ $booking->check_out_date->format('F d, Y') }}</td>
-                        <td class="px-6 py-4 font-bold">₱ {{ $booking->total_price }}</td>
-                        <td class="px-6 py-4 font-bold">₱ {{ $booking->balance }}</td>
-                        <td class="px-6 py-4">{{ $booking->status }}</td>
-                        <td class="px-6 py-4 relative no-print">
+                        {{-- <td class="px-6 py-4 font-bold">₱ {{ $booking->total_price }}</td>
+                        <td class="px-6 py-4 font-bold">₱ {{ $booking->balance }}</td> --}}
+
+                        {{--  --}}
+                        <td class="px-6 py-4">
+                            <p class="font-semibold text-gray-500">
+                                ₱ {{ number_format($booking->total_price, 2) }}
+                            </p>
+                        </td>
+
+                        @php
+                            $total = (float) $booking->total_price;
+                            $balance = (float) $booking->balance;
+
+                            if ($balance <= 0) {
+                                $classes = 'bg-emerald-50 text-emerald-700 ring-emerald-200';
+                                $dot = 'bg-emerald-500';
+                                $label = 'Paid';
+                            } elseif ($balance < $total) {
+                                $classes = 'bg-amber-50 text-amber-700 ring-amber-200';
+                                $dot = 'bg-amber-500';
+                                $label = 'Partial';
+                            } else {
+                                $classes = 'bg-rose-50 text-rose-700 ring-rose-200';
+                                $dot = 'bg-rose-500';
+                                $label = 'Unpaid';
+                            }
+                        @endphp
+
+                        <td class="px-6 py-4">
+                            <div class="flex flex-col">
+                                <span class="text-gray-500">
+                                    ₱ {{ number_format($booking->balance, 2) }}
+                                </span>
+
+                                <span class="mt-1 inline-flex w-fit items-center gap-2 rounded-full px-2.5 py-1 text-[11px] font-semibold ring-1 ring-inset {{ $classes }}">
+                                    <span class="h-1.5 w-1.5 rounded-full {{ $dot }}"></span>
+                                    {{ $label }}
+                                </span>
+                            </div>
+                        </td>
+                        
+                        {{-- <td class="px-6 py-4">{{ $booking->status }}</td> --}}
+
+                        @php
+                            $status = strtolower(trim($booking->status));
+
+                            $statusClasses = match($status) {
+                                'checked_in' => 'bg-emerald-50 text-emerald-700 ring-emerald-200',
+                                'checked_out' => 'bg-slate-100 text-slate-700 ring-slate-200',
+                                'pending' => 'bg-amber-50 text-amber-700 ring-amber-200',
+                                'confirmed' => 'bg-sky-50 text-sky-700 ring-sky-200',
+                                'cancelled' => 'bg-rose-50 text-rose-700 ring-rose-200',
+                                default => 'bg-slate-100 text-slate-700 ring-slate-200',
+                            };
+
+                            $dotClasses = match($status) {
+                                'checked_in' => 'bg-emerald-500',
+                                'checked_out' => 'bg-slate-500',
+                                'pending' => 'bg-amber-500',
+                                'confirmed' => 'bg-sky-500',
+                                'cancelled' => 'bg-rose-500',
+                                default => 'bg-slate-500',
+                            };
+
+                            $label = ucwords(str_replace('_', ' ', $status));
+                        @endphp
+
+                        <td class="px-4 py-3">
+                            <span class="inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold ring-1 ring-inset {{ $statusClasses }}">
+                                <span class="h-2 w-2 rounded-full {{ $dotClasses }}"></span>
+                                {{ $label }}
+                            </span>
+                        </td>
+                        
+                        <td class="px-6 py-4 ">
+                            <a href="/booking/result/{{ $booking->id }}" class="inline-flex items-center gap-2 rounded-xl bg-slate-900 px-3 py-2 text-sm font-semibold text-white transition hover:bg-slate-700">
+                                <x-icon name="eye" class="w-4"/>
+                                View
+                            </a>
+                        </td>
+                        {{-- <td class="px-6 py-4 relative no-print">
                           <button @click="open = !open" class="px-3 py-1 rounded-md hover:bg-gray-100">
                               ⋮
                           </button>
 
                           <div x-show="open" x-cloak @click.away="open = false" x-transition class="absolute right-14 top-3 py-2 px-3 flex justify-center items-center gap-2 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
-                              {{-- <button @click="dl = true" class="text-red-500 hover:bg-gray-200 hover:rounded-lg px-2">Delete</button> --}}
-                              {{-- <a href="/asset/update/3" class=" hover:bg-gray-200 hover:rounded-lg px-2">Edit</a> --}}
                               <a href="/booking/result/{{ $booking->id }}" class="text-green-500 hover:rounded-lg hover:bg-gray-200 px-2">View</a>
                           </div>
 
@@ -130,7 +250,7 @@
                               </div>
                           </div>
                           
-                        </td>
+                        </td> --}}
                       </tr>
                       @empty
                         <tr>
