@@ -17,6 +17,25 @@
         </div>
         
 
+        <div class="flex items-center gap-3">
+            <div class="flex items-center gap-1 shadow border border-gray-200 p-2 rounded-md">
+                <x-icon name="check-circle" class="text-green-500" solid/>
+                <p class="font-semibold">152</p>
+                <p class="text-gray-500 ml-2">Confirmed</p>
+            </div>
+            <div class="flex items-center gap-1 shadow border border-gray-200 p-2 rounded-md">
+                <x-icon name="x-circle" class="text-red-500" solid/>
+                <p class="font-semibold">152</p>
+                <p class="text-gray-500 ml-2">Confirmed</p>
+            </div>
+            <div class="flex items-center gap-1 shadow border border-gray-200 p-2 rounded-md">
+                <x-icon name="question-mark-circle" class="text-gray-500" solid/>
+                <p class="font-semibold">152</p>
+                <p class="text-gray-500 ml-2">No Show</p>
+            </div>
+        </div>
+        
+
         <!-- Current asset list -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
           <div class="p-4 border-b border-gray-200 flex items-center justify-between">
