@@ -24,15 +24,11 @@
                 </div>
 
                 <div class="flex flex-wrap gap-3">
-                    <a href="{{ url('/guest') }}"
+                    <a href="{{ url('/guests') }}"
                         class="inline-flex items-center justify-center rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-100">
                         Back to Guest List
                     </a>
 
-                    <a href="#"
-                        class="inline-flex items-center justify-center rounded-2xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800">
-                        View Guest Profile
-                    </a>
                 </div>
             </div>
 
@@ -331,13 +327,7 @@
                         </div>
                     </div>
 
-                    <!-- Note Card -->
-                    <div class="rounded-[28px] border border-amber-200 bg-amber-50 p-6 shadow-sm">
-                        <h2 class="text-lg font-semibold text-amber-800">Note</h2>
-                        <p class="mt-2 text-sm leading-6 text-amber-700">
-                            This page is now ready for database update functionality and validation handling.
-                        </p>
-                    </div>
+                    
                 </div>
             </div>
         </div>

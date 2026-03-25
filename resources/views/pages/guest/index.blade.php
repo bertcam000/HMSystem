@@ -137,7 +137,7 @@
                                           Cancel
                                       </button>
 
-                                      <form method="POST" action="/guest/delete/{{ $guest->id }} }}">
+                                      <form method="POST" action="/guest/delete/{{ $guest->id }}">
                                           @csrf
                                           @method('DELETE')
                                           <button type="submit" 

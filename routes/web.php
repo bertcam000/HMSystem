@@ -26,7 +26,7 @@ Route::view('profile', 'profile')
     Route::get('/guests', [GuestController::class, 'index']);
     Route::get('/guest/edit/{guest}', [GuestController::class, 'edit']);
     Route::put('/guest/update/{guest}', [GuestController::class, 'update'])->name('guest.update');
-    Route::get('/guest/delete/{guest}', [GuestController::class, 'destroy']);
+    Route::delete('/guest/delete/{guest}', [GuestController::class, 'destroy']);
     // RoomType
     Route::get('/room-type', [RoomTypeController::class, 'index']);
     Route::delete('/rooms/delete/{roomType}', [RoomTypeController::class, 'destroy']);
