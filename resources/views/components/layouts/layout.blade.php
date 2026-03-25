@@ -27,7 +27,7 @@
         x-cloak>
         <div class="  relative text-center ">
             <div class="py-4  flex items-center pl-4 gap-3">
-                <img src="https://hr2.gwamerchandise.com/img/gwamlogo.png" width="70px" alt="" class="rounded-full">
+                <img src="{{ asset('images/bcplogo2.png') }}" width="70px" alt="" class="rounded-full">
                 <div class="text-3xl font-bold">HMS</div>
             </div>
             <button class="absolute top-0 right-0" href="" @click="sb = false"><x-icon name="x-circle" /></button>
@@ -115,12 +115,12 @@
     {{-- MOBILE SIDEBAR --}}
 
     {{-- LARGE SCREEN SIDEBAR --}}
-    <div  :class="!sb2 ? 'w-0' : 'w-72'" class="fixed transition-all duration-300 z-10 bg-gray-900 h-screen text-white hidden lg:block md:static overflow-y-scroll" 
+    <div  :class="!sb2 ? 'w-0' : 'w-72'" class="fixed transition-all duration-300 z-10 bg-gray-700 h-screen text-white hidden lg:block md:static overflow-y-scroll" 
         
     >
         <div class="  relative text-center ">
             <div class="py-4  flex items-center pl-3 gap-3">
-                <img src="https://hr2.gwamerchandise.com/img/gwamlogo.png" width="50px" alt="" class="rounded-full">
+                <img src="{{ asset('images/bcplogo2.png') }}" width="50px" alt="" class="">
                 <div class="text-2xl font-bold font-serif ">HMS</div>
             {{-- <button class="absolute top-0 right-5" href="" @click="sb2 = false">x</button> --}}
 
@@ -136,7 +136,7 @@
                 </div>
                 {{-- <div>Sign</div> --}}
             </a>
-            <a href="/bookings" class=" px-3 py-3    {{ request()->is('bookings') ? 'bg-[#f8fcfc] text-black rounded-l-full' : '' }} rounded-l-full hover:bg-[#f8fcfc] hover:text-black" x-data="{dropdown1:false}">
+            <a wire:navigate href="/bookings" class=" px-3 py-3    {{ request()->is('bookings') ? 'bg-[#f8fcfc] text-black rounded-l-full' : '' }} rounded-l-full hover:bg-[#f8fcfc] hover:text-black" x-data="{dropdown1:false}">
                 <div class="flex justify-between items-center ">
                     <div class=" flex items-center gap-4 px-2">
                         <x-icon name="clipboard-document-list" />
@@ -145,7 +145,7 @@
                 </div>
             </a>
             
-            <a href="/rooms" class=" px-3 py-3    {{ request()->is('rooms') ? 'bg-[#f8fcfc] text-black rounded-l-full' : '' }} rounded-l-full hover:bg-[#f8fcfc] hover:text-black" x-data="{dropdown1:false}">
+            <a wire:navigate href="/rooms" class=" px-3 py-3    {{ request()->is('rooms') ? 'bg-[#f8fcfc] text-black rounded-l-full' : '' }} rounded-l-full hover:bg-[#f8fcfc] hover:text-black" x-data="{dropdown1:false}">
                 <div class="flex justify-between items-center ">
                     <div class=" flex items-center gap-4 px-2">
                         <x-icon name="building-office" />
@@ -153,7 +153,7 @@
                     </div>
                 </div>
             </a>
-            <a href="/room-type" class=" px-3 py-3    {{ request()->is('room-type') ? 'bg-[#f8fcfc] text-black rounded-l-full' : '' }} rounded-l-full hover:bg-[#f8fcfc] hover:text-black" x-data="{dropdown1:false}">
+            <a wire:navigate href="/room-type" class=" px-3 py-3    {{ request()->is('room-type') ? 'bg-[#f8fcfc] text-black rounded-l-full' : '' }} rounded-l-full hover:bg-[#f8fcfc] hover:text-black" x-data="{dropdown1:false}">
                 <div class="flex justify-between items-center ">
                     <div class=" flex items-center gap-4 px-2">
                         <x-icon name="building-office" />
@@ -161,7 +161,7 @@
                     </div>
                 </div>
             </a>
-            <a  href="/guests" class=" px-3 py-3    {{ request()->is('guests') ? 'bg-[#f8fcfc] text-black rounded-l-full' : '' }} rounded-l-full hover:bg-[#f8fcfc] hover:text-black" x-data="{dropdown1:false}">
+            <a wire:navigate  href="/guests" class=" px-3 py-3    {{ request()->is('guests') ? 'bg-[#f8fcfc] text-black rounded-l-full' : '' }} rounded-l-full hover:bg-[#f8fcfc] hover:text-black" x-data="{dropdown1:false}">
                 <div  class="flex justify-between items-center ">
                     <div class=" flex items-center gap-4 px-2">
                         <x-icon name="user-group" />
@@ -169,7 +169,7 @@
                     </div>
                 </div>
             </a>
-            <a href="/events" class=" px-3 py-3    {{ request()->is('events') ? 'bg-[#f8fcfc] text-black rounded-l-full' : '' }} rounded-l-full hover:bg-[#f8fcfc] hover:text-black" x-data="{dropdown1:false}">
+            <a wire:navigate href="/events" class=" px-3 py-3    {{ request()->is('events') ? 'bg-[#f8fcfc] text-black rounded-l-full' : '' }} rounded-l-full hover:bg-[#f8fcfc] hover:text-black" x-data="{dropdown1:false}">
                 <div  class="flex justify-between items-center ">
                     <div class=" flex items-center gap-4 px-2">
                         <x-icon name="user-group" />
@@ -214,7 +214,7 @@
                 &nbsp;
             </div>
             <div class="ml-10 lg:hidden">
-                HRGWA
+                HMS
             </div>
             <div class="relative flex justify-center items-center space-x-3 " x-cloak x-data="{notif: false, logout: false}">
                 <button class="">

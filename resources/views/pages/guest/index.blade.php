@@ -4,7 +4,7 @@
         <x-notification :message="session('success')" type="success" />
     @endif
     
-    <section class="space-y-7 p-3 rounded-xl" x-data="{ addGuest: false }">
+    <section class="space-y-4 p-3 rounded-xl" x-data="{ addGuest: false }">
 
         <div class="flex justify-between items-center">
             <div>
@@ -53,7 +53,7 @@
                           <th scope="col" class="px-6 py-1 font-semibold">NATIONALITY</th>
                           <th scope="col" class="px-6 py-1 font-semibold">IDENTIFICATION</th>
                           <th scope="col" class="px-6 py-1 font-semibold">NOTES</th>
-                          {{-- <th scope="col" class="px-6 py-1 font-semibold no-print">ACTION</th> --}}
+                          <th scope="col" class="px-6 py-1 font-semibold no-print">ACTION</th>
                       </tr>
                   </thead>
                   <tbody>
@@ -76,10 +76,19 @@
                             <h1 class="text-gray-500 text-sms">{{ $guest->id_number }}</h1>
                         </td>
                         <td class="px-6 py-3 text-gray-500">{{ $guest->notes ?? 'None' }}</td>
-                        {{-- <td class="px-6 py-3 relative no-print">
-                          <button @click="open = !open" class="px-3 py-1 rounded-md hover:bg-gray-100">
+                        <td class="px-6 py-3 relative no-print">
+                          {{-- <button @click="open = !open" class="px-3 py-1 rounded-md hover:bg-gray-100">
                               ⋮
-                          </button>
+                          </button> --}}
+
+                            <div class="flex gap-2">
+                                <a href="/guest/edit/{{ $guest->id }}">
+                                    <x-icon name="pencil-square" class="text-blue-700 hover:text-blue-500" />
+                                </a>
+                                <button @click="dl = true">
+                                    <x-icon name="x-circle" class="text-red-700 hover:text-red-500" />
+                                </button>
+                            </div>
 
                           <div x-show="open" x-cloak @click.away="open = false" x-transition class="absolute right-14 top-3 py-2 px-3 flex justify-center items-center gap-2 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
                               <button @click="dl = true" class="text-red-500 hover:bg-gray-200 hover:rounded-lg px-2">Delete</button>
@@ -101,7 +110,7 @@
                                   x-transition:leave-end="opacity-0 scale-90">
 
                                   <h2 class="text-lg font-semibold text-gray-800 mb-4">Delete Confirmation</h2>
-                                  <p class="text-gray-600 mb-6">Are you sure? This asset will permanently deleted</p>
+                                  <p class="text-gray-600 mb-6">Are you sure? This guest will permanently deleted</p>
 
                                   <div class="flex justify-end gap-3">
                                       <button @click="dl = false" 
@@ -109,7 +118,7 @@
                                           Cancel
                                       </button>
 
-                                      <form method="POST" action="/asset/delete/3 }}">
+                                      <form method="POST" action="/guest/delete/{{ $guest->id }} }}">
                                           @csrf
                                           @method('DELETE')
                                           <button type="submit" 
@@ -121,7 +130,7 @@
                               </div>
                           </div>
                           
-                        </td> --}}
+                        </td>
                       </tr>
                              
                     @empty
@@ -136,7 +145,7 @@
                 </table>
                 
                 <div class="p-4 no-print">
-                  {{-- {{ $assets->links() }} --}}
+                  {{ $guests->links() }}
                 </div>
             </div>
             {{--  --}}

@@ -34,7 +34,7 @@ class BookingController extends Controller
             $query->where('room_type_id', $request->room_type_id);
         }
 
-        $bookings = $query->paginate(10)->withQueryString();
+        $bookings = $query->latest()->paginate(10)->withQueryString();
 
         // For dropdown + counts
         return view(

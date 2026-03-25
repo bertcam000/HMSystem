@@ -24,6 +24,9 @@ Route::view('profile', 'profile')
     Route::view('invoices', 'pages.invoices.index');
     // Guests
     Route::get('/guests', [GuestController::class, 'index']);
+    Route::get('/guest/edit/{guest}', [GuestController::class, 'edit']);
+    Route::put('/guest/update/{guest}', [GuestController::class, 'update'])->name('guest.update');
+    Route::get('/guest/delete/{guest}', [GuestController::class, 'destroy']);
     // RoomType
     Route::get('/room-type', [RoomTypeController::class, 'index']);
     Route::delete('/rooms/delete/{roomType}', [RoomTypeController::class, 'destroy']);
@@ -41,6 +44,7 @@ Route::view('profile', 'profile')
     Route::get('/booking/result/{booking}', [BookingController::class, 'show']);
     Route::get('/booking/check-in/{booking}', [BookingController::class, 'checkIn']);
     Route::get('/booking/check-out/{booking}', [BookingController::class, 'checkOut']);
+
 
     // 
     Route::get('/guest/search', function (\Illuminate\Http\Request $request) {

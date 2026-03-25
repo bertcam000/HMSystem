@@ -58,24 +58,52 @@ class GuestController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Guest $guest)
     {
-        //
+        $guest->load([
+            'bookings' => fn ($query) => $query->latest('check_out_date')->take(3)
+        ]);
+        
+
+        $lastBooking = $guest->lastBooking?->check_out_date 
+            ? \Carbon\Carbon::parse($guest->lastBooking->check_out_date)->format('M d, Y') 
+            : 'No stay yet';
+
+        return view('pages.guest.edit', compact('guest', 'lastBooking'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Guest $guest)
     {
-        //
+        $validated = $request->validate([
+            'first_name'    => 'required|string|max:255',
+            'last_name'     => 'required|string|max:255',
+            'email'         => 'nullable|email|max:255|unique:guests,email,' . $guest->id,
+            'phone'         => 'nullable|string|max:50',
+            'nationality'   => 'nullable|string|max:100',
+            'date_of_birth' => 'nullable|date',
+            'id_type'       => 'nullable|string|max:100',
+            'id_number'     => 'nullable|string|max:100',
+            'address'       => 'nullable|string|max:255',
+            'notes'         => 'nullable|string',
+        ]);
+
+        $guest->update($validated);
+
+        return redirect('/guests')
+            ->with('success', 'Guest updated successfully.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Guest $guest)
     {
-        //
+        $guest->delete();
+
+        return redirect('/guests')
+            ->with('success', 'Asset deleted successfully.');
     }
 }

@@ -112,7 +112,7 @@
                         
                     @forelse ($rooms as $room)
                         
-                      <tr class="bg-neutral-primary border-b border-default hover:bg-gray-50" x-data="{ open: false, dl: false }">
+                      <tr class="bg-neutral-primary border-b border-default hover:bg-gray-50" x-data="{ open: false, dl: false, edit: false }">
                         <td class="px-6 py-3">
                             <h1 class=" font-medium">Room {{ $room->room_number }}</h1>
                             <p class="text-gray-500 text-sm"></p>
@@ -125,10 +125,6 @@
                         </td>
                         <td class="px-6 py-3">{{ $room->roomType->bed_type }}</td>
                         
-                        
-                        {{-- <td class="px-6 py-3 text-gray-500 ">
-                            <p class="{{ $room->status === 'Available' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }} text-center rounded-full">{{ $room->status }}</p>
-                        </td> --}}
 
                         @php
                             $statusClasses = match($room->status) {
@@ -167,7 +163,11 @@
                           <div x-show="open" x-cloak @click.away="open = false" x-transition class="absolute right-14 top-3 py-2 px-3 flex justify-center items-center gap-2 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
                               <button @click="dl = true" class="text-red-500 hover:bg-gray-200 hover:rounded-lg px-2">Delete</button>
                               <a href="/asset/update/3" class=" hover:bg-gray-200 hover:rounded-lg px-2">Edit</a>
-                              <a href="/inventory/result/3" class="text-green-500 hover:rounded-lg hover:bg-gray-200 px-2">View</a>
+                              <button @click="edit = true" class="text-green-500 hover:rounded-lg hover:bg-gray-200 px-2">View</button>
+                          </div>
+
+                          <div x-show="edit">
+                            <livewire:test.test :room="$room"/>
                           </div>
 
                           <div x-show="dl" x-cloak

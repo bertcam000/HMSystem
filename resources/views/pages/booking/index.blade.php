@@ -74,7 +74,7 @@
                 <option value="50" {{ request('pages') == '50' ? 'selected' : '' }}>50</option>
               </select>
                 <div class="flex items-center gap-3">
-                    <x-input icon="magnifying-glass" onchange="this.form.submit()" type="text" value="{{ request('room_number') }}" id="room_number" name="room_number" placeholder="Search room number..." class=""/>
+                    <x-input icon="magnifying-glass" onchange="this.form.submit()" type="text" value="{{ request('booking_code') }}" id="booking_code" name="booking_code" placeholder="Search room number..." class=""/>
                     <select onchange="this.form.submit()" name="room_type_id" id="room_type_id" class="text-sm border border-gray-300 rounded-md px-3 w-36 py-2 shadow-sm">
                         <option value="" {{ request('room_type_id') ? '' : 'selected' }}>All Types</option>
                         <option value=""></option>
@@ -202,10 +202,21 @@
                         </td>
                         
                         <td class="px-6 py-4 ">
-                            <a href="/booking/result/{{ $booking->id }}" class="inline-flex items-center gap-2 rounded-xl bg-slate-900 px-3 py-2 text-sm font-semibold text-white transition hover:bg-slate-700">
+                            {{-- <a href="/booking/result/{{ $booking->id }}" class="inline-flex items-center gap-2 rounded-xl bg-slate-900 px-3 py-2 text-sm font-semibold text-white transition hover:bg-slate-700">
                                 <x-icon name="eye" class="w-4"/>
                                 View
-                            </a>
+                            </a> --}}
+                            <div class="flex gap-2">
+                                <a href="/guest/edit/2">
+                                    <x-icon name="pencil-square" class="text-blue-700 hover:text-blue-500" />
+                                </a>
+                                <button @click="dl = true">
+                                    <x-icon name="x-circle" class="text-red-700 hover:text-red-500" />
+                                </button>
+                                <a href="/booking/result/{{ $booking->id }}">
+                                    <x-icon name="eye" class="text-green-700"/>
+                                </a>
+                          </div>
                         </td>
                         {{-- <td class="px-6 py-4 relative no-print">
                           <button @click="open = !open" class="px-3 py-1 rounded-md hover:bg-gray-100">
