@@ -150,7 +150,6 @@ new #[Layout('components.layouts.guest-layout')] class extends Component
                 <div>
                 <div class="mb-2 flex items-center justify-between gap-3">
                     <label class="block text-sm font-medium text-slate-700">Password</label>
-                    <a href="#" class="text-sm font-medium text-slate-500 hover:text-slate-800">Forgot?</a>
                 </div>
                 <input wire:model="form.password" id="password"
                     type="password"

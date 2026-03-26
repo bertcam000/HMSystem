@@ -113,6 +113,32 @@ class BookingController extends Controller
         }
     }
 
+    public function cancel(Request $request, Booking $booking)
+    {
+        if (! in_array($booking->status, ['reserved', 'confirmed'])) {
+            return back()->with('error', 'This booking can no longer be cancelled.');
+        }
+
+        DB::transaction(function () use ($booking, $request) {
+            $booking->update([
+                'status' => 'cancelled',
+                'cancellation_reason' => $request->reason,
+                'cancelled_at' => now(),
+                'cancelled_by' => auth()->id(),
+            ]);
+
+            if ($booking->invoice) {
+                $booking->invoice->update([
+                    'status' => 'cancelled',
+                ]);
+            }
+        });
+
+        return redirect()
+            ->back()
+            ->with('success', 'Booking cancelled successfully.');
+    }
+
     /**
      * Show the form for creating a new resource.
      */

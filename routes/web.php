@@ -102,6 +102,7 @@ Route::middleware(['auth', 'role:admin,staff'])->group(function () {
     Route::get('/booking/result/{booking}', [BookingController::class, 'show'])->name('booking.result');
     Route::get('/booking/check-in/{booking}', [BookingController::class, 'checkIn'])->name('booking.check-in');
     Route::get('/booking/check-out/{booking}', [BookingController::class, 'checkOut'])->name('booking.check-out');
+    Route::patch('/booking/{booking}/cancel', [BookingController::class, 'cancel'])->name('booking.cancel');
 
     Route::get('/guests', [GuestController::class, 'index'])->name('guests');
     Route::get('/guest/edit/{guest}', [GuestController::class, 'edit'])->name('guest.edit');

@@ -11,7 +11,7 @@
                 <h1 class="text-2xl font-bold text-gray-800 ">Bookings</h1>
                 <p class="text-gray-600">6 total bookings</p>
             </div>
-            <a href="/book" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primaryDark transition-colors text-sm font-medium">
+            <a @click="addBooking = true" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primaryDark transition-colors text-sm font-medium">
             + Add Booking
             </a>
         </div>
