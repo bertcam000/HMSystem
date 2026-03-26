@@ -44,7 +44,7 @@ new class extends Component {
 <div @click.away="addRoom =false" class="max-w-md mx-auto mt-10 bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
     <h2 class="text-xl font-semibold text-gray-800 mb-2">Add New Room</h2>
     <p class="text-sm text-gray-500 mb-6">Enter the room number to add it to the system.</p>
-    <form class="space-y-4" wire:submit.prevent="submit" @click.away="fmodal = ''">
+    <form class="space-y-4" wire:submit.prevent="submit" @click.away="addRoom = ''">
         <div>
             <label class="block text-sm text-gray-600 mb-1" for="name">Room Number</label>
             <input

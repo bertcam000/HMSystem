@@ -20,8 +20,16 @@ new #[Layout('components.layouts.guest-layout')] class extends Component
 
         Session::regenerate();
 
-        $this->redirectIntended(default: route('dashboard', absolute: false), navigate: true);
-    }
+        $user = Auth::user();
+
+        $redirectRoute = match ($user->role) {
+            'admin' => 'dashboard',
+            'staff' => 'bookings',
+            default => 'dashboard',
+        };
+
+        $this->redirect(route($redirectRoute), navigate: false);
+        }
 }; ?>
 
 {{-- <div>
@@ -73,7 +81,7 @@ new #[Layout('components.layouts.guest-layout')] class extends Component
 {{--  --}}
 
 <div class="min-h-screen grid lg:grid-cols-2">
-    <div class="m-3 rounded-3xl hidden lg:flex flex-col justify-between bg-gradient-to-b from-[#24b6fa] via-[#108ccf] to-[#0c71af] px-12 py-14 text-white">
+    <div class="m-3 rounded-3xl hidden lg:flex flex-col justify-between bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 px-12 py-14 text-white">
       <div class="flex items-center gap-3">
         <div class="flex  items-center justify-center rounded-2xl text-slate-900 text-lg font-bold shadow-sm">
            <img src="{{ asset('images/bcplogo2.png') }}" class="w-36 h-36" alt="">

@@ -35,6 +35,7 @@
         <div class=" pl-6 mt-4 text-[11px] text-[gray]">MAIN MENU</div>
         {{-- <hr class=" h-0.5 border-t-0 bg-neutral-100 dark:bg-white/10" /> --}}
         <div class="mt-4 px-4  grid gap-3">
+             @can('view-page')
             <div class="flex justify-between items-center px-3 py-3 rounded-md hover:bg-gray-800">
                 <a href="/dashboard" class="flex items-center gap-1">
                     <x-icon name="squares-2x2" />
@@ -42,6 +43,7 @@
                 </a>
                 <div>Sign</div>
             </div>
+            @endcan
             <div class=" px-3 py-3 rounded-md hover:bg-gray-800" x-data="{dropdown1:false}">
                 <div class="flex justify-between items-center">
                     <a wire:navigate href="/bookings" @click="dropdown1=true" @click.away="dropdown1=false" class="flex items-center gap-1">
@@ -82,12 +84,14 @@
               
             </div>
             <div class=" px-3 py-3 rounded-md hover:bg-gray-800" x-data="{dropdown2:false}">
+                @can('view-page')
                 <div class="flex justify-between items-center">
                     <a href="/invoices" class="flex items-center gap-1">
                         <x-icon name="document-arrow-up" />
                         Invoices
                     </a>
                 </div>
+                @endcan
               
             </div>
             <div class="px-3 py-3 rounded-md hover:bg-gray-800">
@@ -96,16 +100,8 @@
                     Housekeeping
                 </div>
             </div>
-            <div class="px-3 py-3 rounded-md hover:bg-gray-800">
-                <div class="flex items-center gap-1">
-                    <x-icon name="briefcase" />
-                    Offboarding
-                </div>
-            </div>
 
-            <div class="mt-12 px-3 py-3 rounded-md hover:bg-gray-800">
-                <div>Profile</div>
-            </div>
+            
             <div class="px-3 py-3 rounded-md hover:bg-gray-800">
                 <div>Logout</div>
             </div>
@@ -115,7 +111,7 @@
     {{-- MOBILE SIDEBAR --}}
 
     {{-- LARGE SCREEN SIDEBAR --}}
-    <div  :class="!sb2 ? 'w-0' : 'w-72'" class="fixed transition-all duration-300 z-10 bg-gray-700 h-screen text-white hidden lg:block md:static overflow-y-scroll" 
+    <div  :class="!sb2 ? 'w-0' : 'w-72'" class="fixed transition-all duration-300 z-10 bg-gray-700 h-screen text-white hidden lg:block md:static overflow-y-scroll relative" 
         
     >
         <div class="  relative text-center ">
@@ -129,6 +125,7 @@
         <div class=" pl-6 mt-4 text-[11px] text-[gray]">MAIN MENU</div>
         {{-- <hr class=" h-0.5 border-t-0 bg-neutral-100 dark:bg-white/10" /> --}}
         <div class="   grid gap-3 ">
+            @can('view-page')
             <a  href="/dashboard" class="{{ request()->is('dashboard') ? 'bg-[#f8fcfc] text-black hover:bg-none' : '' }} flex justify-between items-center px-3 py-3 rounded-l-full hover:bg-[#f8fcfc] hover:text-black" >
                 <div class="flex items-center gap-4 px-2">
                     <x-icon name="squares-2x2" />
@@ -136,6 +133,7 @@
                 </div>
                 {{-- <div>Sign</div> --}}
             </a>
+            @endcan
             <a wire:navigate href="/bookings" class=" px-3 py-3    {{ request()->is('bookings') ? 'bg-[#f8fcfc] text-black rounded-l-full' : '' }} rounded-l-full hover:bg-[#f8fcfc] hover:text-black" x-data="{dropdown1:false}">
                 <div class="flex justify-between items-center ">
                     <div class=" flex items-center gap-4 px-2">
@@ -153,6 +151,7 @@
                     </div>
                 </div>
             </a>
+            @can('view-page')
             <a wire:navigate href="/room-type" class=" px-3 py-3    {{ request()->is('room-type') ? 'bg-[#f8fcfc] text-black rounded-l-full' : '' }} rounded-l-full hover:bg-[#f8fcfc] hover:text-black" x-data="{dropdown1:false}">
                 <div class="flex justify-between items-center ">
                     <div class=" flex items-center gap-4 px-2">
@@ -161,6 +160,7 @@
                     </div>
                 </div>
             </a>
+            @endcan
             <a wire:navigate  href="/guests" class=" px-3 py-3    {{ request()->is('guests') ? 'bg-[#f8fcfc] text-black rounded-l-full' : '' }} rounded-l-full hover:bg-[#f8fcfc] hover:text-black" x-data="{dropdown1:false}">
                 <div  class="flex justify-between items-center ">
                     <div class=" flex items-center gap-4 px-2">
@@ -177,6 +177,7 @@
                     </div>
                 </div>
             </a>
+            @can('view-page')
             <div class=" px-3 py-3    {{ request()->is('task-management') ? 'bg-[#f8fcfc] text-black rounded-l-full' : '' }} rounded-l-full hover:bg-[#f8fcfc] hover:text-black" x-data="{dropdown1:false}">
                 <div class="flex justify-between items-center ">
                     <a wire:navigate href="/housekeeping" @click="dropdown1=true" @click.away="dropdown1=false" class=" flex items-center gap-4 px-2">
@@ -185,6 +186,7 @@
                     </a>
                 </div>
             </div>
+           
             <div class=" px-3 py-3    {{ request()->is('task-management') ? 'bg-[#f8fcfc] text-black rounded-l-full' : '' }} rounded-l-full hover:bg-[#f8fcfc] hover:text-black" x-data="{dropdown1:false}">
                 <div class="flex justify-between items-center ">
                     <a wire:navigate href="/invoices" @click="dropdown1=true" @click.away="dropdown1=false" class=" flex items-center gap-4 px-2">
@@ -193,6 +195,9 @@
                     </a>
                 </div>
             </div>
+            @endcan
+
+            <livewire:layout.navigation />
 
             
         </div>

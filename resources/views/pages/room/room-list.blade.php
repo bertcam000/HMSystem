@@ -4,14 +4,14 @@
         <x-notification :message="session('success')" type="success" />
     @endif
     
-    <section class="space-y-7 p-3 rounded-xl" x-data="{ addGuest: false }">
+    <section class="space-y-7 p-3 rounded-xl" x-data="{ addRoom: false }">
 
         <div class="flex justify-between items-center">
             <div>
                 <h1 class="text-2xl font-bold text-gray-800 ">Rooms</h1>
                 <p class="text-gray-600">6 total rooms</p>
             </div>
-            <button @click="addGuest = true" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primaryDark transition-colors text-sm font-medium">
+            <button @click="addRoom = true" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primaryDark transition-colors text-sm font-medium">
             + Add Room
             </button>
         </div>
@@ -227,7 +227,7 @@
         </div>
 
         {{-- MODAl --}}
-        <div x-show="addGuest" x-cloak class="px-2 md:px-0 transition-all duration-300 flex h-screen w-full bg-black/20 fixed -top-7 left-0 z-50  justify-center items-center">
+        <div x-show="addRoom" x-cloak class="px-2 md:px-0 transition-all duration-300 flex h-screen w-full bg-black/20 fixed -top-7 left-0 z-50  justify-center items-center">
             <livewire:room.create-room/>
         </div>
     </section>

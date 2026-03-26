@@ -9,7 +9,7 @@
         <div class="flex justify-between items-center">
             <div>
                 <h1 class="text-2xl font-bold text-gray-800 ">Guests</h1>
-                <p class="text-gray-600">6 total guests</p>
+                <p class="text-gray-600">{{ count($guests) }} total guests</p>
             </div>
             <button @click="addGuest = true" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primaryDark transition-colors text-sm font-medium">
             + Add Guest
