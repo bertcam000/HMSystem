@@ -70,7 +70,7 @@
             <form action="/rooms" method="GET" class="flex justify-between items-center w-full">
               
                 <div class="flex items-center gap-3">
-                    <x-input icon="magnifying-glass" onchange="this.form.submit()" type="text" value="{{ request('search') }}" id="search" name="search" placeholder="Search room number..." class="w-full lg:w-[450px]"/>
+                    <x-input icon="magnifying-glass" onchange="this.form.submit()" type="text" value="{{ request('room_number') }}" id="room_number" name="room_number" placeholder="Search room number..." class="w-full lg:w-[450px]"/>
                     <select onchange="this.form.submit()" name="room_type_id" id="room_type_id" class="text-sm border border-gray-300 rounded-md px-3 w-36 py-2 shadow-sm">
                         <option value="" {{ request('room_type_id') ? '' : 'selected' }}>All Types</option>
                         @foreach ($roomTypes as $roomType)
@@ -92,7 +92,7 @@
                     </select>
                     
                 </div>
-                <button class="bg-primary text-white px-3 py-2 shadow-sm rounded text-sm">Search</button>
+                <button type="submit" class="bg-primary text-white px-3 py-2 shadow-sm rounded text-sm">Search</button>
             </form>
           </div>
 
@@ -156,7 +156,7 @@
                         </td>
                         
                         <td class="px-6 py-3 relative no-print">
-                          <button @click="open = !open" class="px-3 py-1 rounded-md hover:bg-gray-100">
+                          {{-- <button @click="open = !open" class="px-3 py-1 rounded-md hover:bg-gray-100">
                               ⋮
                           </button>
 
@@ -164,11 +164,27 @@
                               <button @click="dl = true" class="text-red-500 hover:bg-gray-200 hover:rounded-lg px-2">Delete</button>
                               <a href="/asset/update/3" class=" hover:bg-gray-200 hover:rounded-lg px-2">Edit</a>
                               <button @click="edit = true" class="text-green-500 hover:rounded-lg hover:bg-gray-200 px-2">View</button>
+                          </div> --}}
+
+                          <div class="flex gap-2">
+                                <button @click="edit = true">
+                                    <x-icon name="pencil-square" class="text-blue-700 hover:text-blue-500" />
+                                </button>
+                                <button @click="dl = true">
+                                    <x-icon name="x-circle" class="text-red-700 hover:text-red-500" />
+                                </button>
+                                {{-- <a href="/booking/result/{{ $booking->id }}">
+                                    <x-icon name="eye" class="text-green-700"/>
+                                </a> --}}
                           </div>
 
-                          <div x-show="edit">
+                          {{-- <div x-show="edit">
                             <livewire:test.test :room="$room"/>
-                          </div>
+                          </div> --}}
+
+                          <div x-show="edit" x-cloak class="px-2 md:px-0 transition-all duration-300 flex h-screen w-full bg-black/20 fixed top-0 left-0 z-50  justify-center items-center">
+                                <livewire:room.edit-room :room="$room"/>
+                            </div>
 
                           <div x-show="dl" x-cloak
                               class="fixed inset-0 flex items-center justify-center z-50">

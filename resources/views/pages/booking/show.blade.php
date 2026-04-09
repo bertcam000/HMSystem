@@ -4,7 +4,7 @@
 
 <x-layouts.layout>
     <div class="min-h-screen bg-slate-50">
-        <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+        <div class="mx-auto w-full">
 
             <!-- Header -->
             <div class="mb-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
@@ -221,7 +221,11 @@
 
 
                             @if(in_array($booking->status, ['reserved', 'confirmed']))
-                                <a href="/booking/check-in/{{ $booking->id }}"
+                                {{-- <a href="/booking/check-in/{{ $booking->id }}"
+                                     class="text-center rounded-2xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700">
+                                    Confirm Check In
+                                </a> --}}
+                                <a href="/check-in/{{ $booking->id }}"
                                      class="text-center rounded-2xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700">
                                     Confirm Check In
                                 </a>
@@ -239,7 +243,7 @@
                                 </form>
 
                             @elseif($booking->status === 'checked_in')
-                                <a href="/booking/check-out/{{ $booking->id }}"
+                                <a href="/check-out/{{ $booking->id }}"
                                 class="text-center rounded-2xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-700">
                                     Confirm Check Out
                                 </a>

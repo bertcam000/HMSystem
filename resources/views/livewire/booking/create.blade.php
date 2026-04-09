@@ -39,24 +39,16 @@ new class extends Component {
         }
 
         return Room::with('roomType')
-
             ->where('room_type_id', $this->roomTypeId)
-
             ->where('status', 'Available')
-
             ->whereDoesntHave('bookings', function ($query) {
-
-                $query->where(function ($q) {
-
-                    $q->where('check_in_date', '<', $this->check_out)
-                      ->where('check_out_date', '>', $this->check_in);
-
-                });
-
+                $query->whereIn('status', ['reserved', 'confirmed', 'checked_in'])
+                    ->where(function ($q) {
+                        $q->where('check_in_date', '<', $this->check_out)
+                        ->where('check_out_date', '>', $this->check_in);
+                    });
             })
-
             ->orderBy('room_number')
-
             ->get();
     }
 
@@ -205,12 +197,12 @@ new class extends Component {
 
 };
 ?>
-<div class="bg-white p-10 rounded-lg">
+<div class="bg-white p-10 rounded-lg" @click.away="addBooking = false">
     <form wire:submit.prevent="saveReservation">
         <section class="grid lg:grid-cols-5 gap-5">
-            <div @click.away="addBooking = false" class="col-span-3 bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+            <div class="col-span-3 bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
                 <h2 class="text-xl font-semibold text-gray-800 mb-2">New Booking</h2>
-                <div class="space-y-4 mt-4"  @click.away="addBooking = ''">
+                <div class="space-y-4 mt-4">
                     <div>
                         <x-select
                             label="Select Guest"

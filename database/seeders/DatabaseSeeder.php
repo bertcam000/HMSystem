@@ -25,27 +25,27 @@ class DatabaseSeeder extends Seeder
         //     'role' => 'admin',
         // ]);
 
-        User::factory()->create([
-            'name' => 'Test User2',
-            'email' => 'test2@example.com',
-            'role' => 'staff',
+        // User::factory()->create([
+        //     'name' => 'Test User2',
+        //     'email' => 'test2@example.com',
+        //     'role' => 'staff',
+        // ]);
+
+        Feature::insert([
+            ['name' => 'Private balcony'],
+            ['name' => 'Work desk'],
+            ['name' => 'Seating area'],
+            ['name' => 'Large windows']
         ]);
 
-        // Feature::insert([
-        //     ['name' => 'Private balcony'],
-        //     ['name' => 'Work desk'],
-        //     ['name' => 'Seating area'],
-        //     ['name' => 'Large windows']
-        // ]);
-
-        // Facility::insert([
-        //     ['name' => 'High speed WiFi'],
-        //     ['name' => 'Flat screen TV'],
-        //     ['name' => 'Mini fridge'],
-        //     ['name' => 'Air conditioning'],
-        //     ['name' => 'Coffee maker'],
-        //     ['name' => 'Room service']
-        // ]);
+        Facility::insert([
+            ['name' => 'High speed WiFi'],
+            ['name' => 'Flat screen TV'],
+            ['name' => 'Mini fridge'],
+            ['name' => 'Air conditioning'],
+            ['name' => 'Coffee maker'],
+            ['name' => 'Room service']
+        ]);
         
     }
 }

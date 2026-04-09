@@ -207,12 +207,12 @@
                                 View
                             </a> --}}
                             <div class="flex gap-2">
-                                <a href="/guest/edit/2">
+                                {{-- <a href="/guest/edit/2">
                                     <x-icon name="pencil-square" class="text-blue-700 hover:text-blue-500" />
                                 </a>
                                 <button @click="dl = true">
                                     <x-icon name="x-circle" class="text-red-700 hover:text-red-500" />
-                                </button>
+                                </button> --}}
                                 <a href="/booking/result/{{ $booking->id }}">
                                     <x-icon name="eye" class="text-green-700"/>
                                 </a>

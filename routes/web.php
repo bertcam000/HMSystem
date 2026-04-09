@@ -1,10 +1,13 @@
 <?php
 
-use App\Http\Controllers\BookingController;
-use App\Http\Controllers\GuestController;
-use App\Http\Controllers\RoomController;
-use App\Http\Controllers\RoomTypeController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\RoomController;
+use App\Http\Controllers\GuestController;
+use App\Http\Controllers\BookingController;
+use App\Http\Controllers\CheckInController;
+use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\CheckOutController;
+use App\Http\Controllers\RoomTypeController;
 
 Route::view('/', 'welcome');
 
@@ -133,12 +136,26 @@ Route::middleware(['auth', 'role:admin,staff'])->group(function () {
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::view('/dashboard', 'pages.dashboard.index')->name('dashboard');
     Route::view('/housekeeping', 'pages.housekeeping.index')->name('housekeeping');
-    Route::view('/invoices', 'pages.invoices.index')->name('invoices');
+    // Route::view('/invoices', 'pages.invoices.index')->name('invoices');
 
     Route::get('/room-type', [RoomTypeController::class, 'index'])->name('room-type.index');
     Route::delete('/rooms/delete/{roomType}', [RoomTypeController::class, 'destroy'])->name('room-type.delete');
 
     Route::delete('/guest/delete/{guest}', [GuestController::class, 'destroy'])->name('guest.delete');
 });
+
+
+// Route::view('/test', 'pages.check-out.index')->name('check-in');
+Route::get('/check-in/{booking}', [CheckInController::class, 'show'])->name('check-in.show');
+Route::post('/booking/{booking}/payment', [CheckInController::class, 'store'])
+    ->name('booking.payment.store');
+
+
+Route::get('/check-out/{booking}', [CheckOutController::class, 'show'])->name('hms.check-out.show');
+Route::post('/hms/check-out/{booking}', [CheckOutController::class, 'store'])->name('hms.check-out.store');
+
+
+Route::get('/invoices', [InvoiceController::class, 'index'])->name('invoices.index');
+Route::get('/invoices/{booking}', [InvoiceController::class, 'show'])->name('invoices.show');
 
 require __DIR__.'/auth.php';

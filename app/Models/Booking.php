@@ -8,6 +8,31 @@ class Booking extends Model
 {
     protected $guarded = ['id'];
 
+    // protected $casts = [
+    //     'check_in_date' => 'date',
+    //     'check_out_date' => 'date',
+    //     'checked_in_at' => 'datetime',
+    //     'checked_out_at' => 'datetime',
+    //     'tax' => 'decimal:2',
+    //     'service_charge' => 'decimal:2',
+    //     'subtotal' => 'decimal:2',
+    //     'total_price' => 'decimal:2',
+    //     'paid_amount' => 'decimal:2',
+    //     'balance' => 'decimal:2',
+    // ];
+    protected $cast = [
+        'check_in_date' => 'date',
+        'check_out_date' => 'date',
+        'checked_in_at' => 'datetime',
+        'checked_out_at' => 'datetime',
+        'tax' => 'decimal:2',
+        'service_charge' => 'decimal:2',
+        'subtotal' => 'decimal:2',
+        'total_price' => 'decimal:2',
+        'paid_amount' => 'decimal:2',
+        'balance' => 'decimal:2',
+    ];
+
    public function guest()
     {
         return $this->belongsTo(Guest::class);
@@ -15,7 +40,9 @@ class Booking extends Model
 
     public function rooms()
     {
-        return $this->belongsToMany(Room::class, 'booking_rooms');
+        return $this->belongsToMany(Room::class, 'booking_rooms')
+            ->withPivot('total_price')
+            ->withTimestamps();
     }
 
     public function payments()
