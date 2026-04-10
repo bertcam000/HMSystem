@@ -441,12 +441,12 @@ new class extends Component {
                 </div>
 
                 <button type="submit" class="mt-6 w-full rounded-2xl bg-slate-900 text-white font-semibold py-3.5 hover:bg-slate-700 transition">
-                    Proceed Payment
+                    Add Booking
                 </button>
 
-                <button class="mt-3 w-full rounded-2xl border border-slate-300 text-slate-700 font-semibold py-3.5 hover:bg-slate-100 transition">
+                {{-- <button class="mt-3 w-full rounded-2xl border border-slate-300 text-slate-700 font-semibold py-3.5 hover:bg-slate-100 transition">
                     Print Summary
-                </button>
+                </button> --}}
 
             </div>
             

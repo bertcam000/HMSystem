@@ -7,7 +7,9 @@ use App\Http\Controllers\BookingController;
 use App\Http\Controllers\CheckInController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\CheckOutController;
+use App\Http\Controllers\NightAuditController;
 use App\Http\Controllers\RoomTypeController;
+use App\Http\Controllers\ReportController;
 
 Route::view('/', 'welcome');
 
@@ -157,5 +159,14 @@ Route::post('/hms/check-out/{booking}', [CheckOutController::class, 'store'])->n
 
 Route::get('/invoices', [InvoiceController::class, 'index'])->name('invoices.index');
 Route::get('/invoices/{booking}', [InvoiceController::class, 'show'])->name('invoices.show');
+
+Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+
+
+Route::get('/night-audit', [NightAuditController::class, 'index'])->name('night-audit.index');
+Route::post('/night-audit/run', [NightAuditController::class, 'run'])->name('night-audit.run');
+Route::get('/night-audit/history', [NightAuditController::class, 'history'])->name('night-audit.history');
+Route::get('/night-audit/{nightAudit}', [NightAuditController::class, 'show'])
+    ->name('night-audit.show');
 
 require __DIR__.'/auth.php';

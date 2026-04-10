@@ -147,7 +147,7 @@
                 <div class="flex justify-between items-center ">
                     <div class=" flex items-center gap-4 px-2">
                         <x-icon name="building-office" />
-                        Rooms List
+                        Rooms
                     </div>
                 </div>
             </a>
@@ -156,7 +156,7 @@
                 <div class="flex justify-between items-center ">
                     <div class=" flex items-center gap-4 px-2">
                         <x-icon name="building-office" />
-                        Room Type List
+                        Room Type
                     </div>
                 </div>
             </a>
