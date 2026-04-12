@@ -1,7 +1,7 @@
 <x-layouts.layout>
 
-<div class="min-h-screen bg-slate-100">
-    <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+<div class="min-h-screen">
+    <div class="">
         <div class="mb-8">
             <div class="mb-3 inline-flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700 ring-1 ring-inset ring-blue-100">
                 <span class="h-2 w-2 rounded-full bg-blue-500"></span>

@@ -111,20 +111,20 @@
     {{-- MOBILE SIDEBAR --}}
 
     {{-- LARGE SCREEN SIDEBAR --}}
-    <div  :class="!sb2 ? 'w-0' : 'w-72'" class="fixed transition-all duration-300 z-10 bg-gray-700 h-screen text-white hidden lg:block md:static overflow-y-scroll relative" 
+    <div  :class="!sb2 ? 'w-0' : 'w-72'" class="fixed transition-all duration-300 z-10 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 h-screen text-gray-300 font-semibold hidden lg:block md:static overflow-y-scroll relative" 
         
     >
-        <div class="  relative text-center ">
+        <div class="border-b-[1px] border-gray-700  relative text-center ">
             <div class="py-4  flex items-center pl-3 gap-3">
                 <img src="{{ asset('images/bcplogo2.png') }}" width="50px" alt="" class="">
-                <div class="text-2xl font-bold font-serif ">HMS</div>
+                <div class="text-xl font-semibold font-sans">LaNuevoHotel</div>
             {{-- <button class="absolute top-0 right-5" href="" @click="sb2 = false">x</button> --}}
 
             </div>
         </div>
-        <div class=" pl-6 mt-4 text-[11px] text-[gray]">MAIN MENU</div>
+        {{-- <div class=" pl-6 mt-4 text-[11px] text-[gray]">MAIN MENU</div> --}}
         {{-- <hr class=" h-0.5 border-t-0 bg-neutral-100 dark:bg-white/10" /> --}}
-        <div class="   grid gap-3 ">
+        <div class="   grid gap-1 mt-5">
             @can('view-page')
             <a  href="/dashboard" class="{{ request()->is('dashboard') ? 'bg-[#f8fcfc] text-black hover:bg-none' : '' }} flex justify-between items-center px-3 py-3 rounded-l-full hover:bg-[#f8fcfc] hover:text-black" >
                 <div class="flex items-center gap-4 px-2">
@@ -172,7 +172,7 @@
             <a wire:navigate href="/events" class=" px-3 py-3    {{ request()->is('events') ? 'bg-[#f8fcfc] text-black rounded-l-full' : '' }} rounded-l-full hover:bg-[#f8fcfc] hover:text-black" x-data="{dropdown1:false}">
                 <div  class="flex justify-between items-center ">
                     <div class=" flex items-center gap-4 px-2">
-                        <x-icon name="user-group" />
+                        <x-icon name="calendar-days" />
                         Events
                     </div>
                 </div>
@@ -192,6 +192,14 @@
                     <a wire:navigate href="/invoices" @click="dropdown1=true" @click.away="dropdown1=false" class=" flex items-center gap-4 px-2">
                         <x-icon name="briefcase" />
                         Invoices
+                    </a>
+                </div>
+            </div>
+            <div class=" px-3 py-3    {{ request()->is('task-management') ? 'bg-[#f8fcfc] text-black rounded-l-full' : '' }} rounded-l-full hover:bg-[#f8fcfc] hover:text-black" x-data="{dropdown1:false}">
+                <div class="flex justify-between items-center ">
+                    <a wire:navigate href="/night-audit" @click="dropdown1=true" @click.away="dropdown1=false" class=" flex items-center gap-4 px-2">
+                        <x-icon name="moon"/>
+                        Night Audit
                     </a>
                 </div>
             </div>

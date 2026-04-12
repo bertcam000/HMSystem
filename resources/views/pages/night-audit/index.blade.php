@@ -1,4 +1,13 @@
 <x-layouts.layout>
+
+    @if (session('success'))
+    <x-notification :message="session('success')" type="success" />
+    @endif
+
+    @if (session('error'))
+        <x-notification :message="session('error')" type="error" />
+    @endif
+    
     <div class="min-h-screen">
         <div class="">
 
