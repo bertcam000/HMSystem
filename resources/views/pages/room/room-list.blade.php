@@ -22,7 +22,7 @@
                 
                 <div>
                     <div class="text-gray-500 text-sm">Available Room</div>
-                    <p class="text-2xl font-bold">5</p>
+                    <p class="text-2xl font-bold">{{ $roomStatus['Available'] ?? 0 }}</p>
                     <p class="text-gray-400 text-xs">Ready for booking</p>
                 </div>
                 <div class="bg-yellow-400 p-2 rounded-md h-10 w-10 flex items-center justify-center">
@@ -32,7 +32,7 @@
             <div class="shadow-md flex justify-between gap-5 bg-white p-4 border border-gray-300/60 rounded-xl">
                 <div>
                     <div class="text-gray-500 text-sm">Reserved Rooms</div>
-                    <p class="text-2xl font-bold">10</p>
+                    <p class="text-2xl font-bold">{{ $roomStatus['Reserved'] ?? 0 }}</p>
                     <p class="text-gray-400 text-xs text-blue-400">Upcoming arrivals</p>
                 </div>
                 <div class="bg-green-500 p-2 rounded-md h-10 w-10 flex items-center justify-center">
@@ -42,7 +42,7 @@
             <div class="shadow-md flex justify-between gap-5 bg-white p-4 border border-gray-300/60 rounded-xl">
                 <div>
                     <div class="text-gray-500 text-sm">Maintenance</div>
-                    <p class="text-2xl font-bold">5</p>
+                    <p class="text-2xl font-bold">{{ $roomStatus['Maintenance'] ?? 0 }}</p>
                     <p class="text-gray-400 text-xs text-orange-500">Needs to clean/check</p>
                 </div>
                 <div class="bg-blue-500 p-2 rounded-md h-10 w-10 flex items-center justify-center">
@@ -54,7 +54,7 @@
                 
                 <div>
                     <div class="text-gray-500 text-sm">Occupied Room</div>
-                    <p class="text-2xl font-bold">58</p>
+                    <p class="text-2xl font-bold">{{ $roomStatus['Occupied'] ?? 0 }}</p>
                     <p class="text-gray-400 text-xs text-red-500">Currently in use</p>
                 </div>
                 <div class="bg-red-500 p-2 rounded-md h-10 w-10 flex items-center justify-center">
@@ -130,18 +130,18 @@
                             $statusClasses = match($room->status) {
                                 'Available' => 'bg-emerald-50 text-emerald-700 ring-emerald-200',
                                 'Occupied' => 'bg-rose-50 text-rose-700 ring-rose-200',
-                                'reserved' => 'bg-sky-50 text-sky-700 ring-sky-200',
-                                'cleaning' => 'bg-violet-50 text-violet-700 ring-violet-200',
-                                'maintenance' => 'bg-amber-50 text-amber-700 ring-amber-200',
+                                'Dirty' => 'bg-amber-50 text-amber-700 ring-amber-200',
+                                'Cleaning' => 'bg-violet-50 text-violet-700 ring-violet-200',
+                                'Maintenance' => 'bg-amber-50 text-amber-700 ring-amber-200',
                                 default => 'bg-slate-100 text-slate-700 ring-slate-200',
                             };
 
                             $dotClasses = match($room->status) {
                                 'Available' => 'bg-emerald-500',
                                 'Occupied' => 'bg-rose-500',
-                                'reserved' => 'bg-sky-500',
-                                'cleaning' => 'bg-violet-500',
-                                'maintenance' => 'bg-amber-500',
+                                'Dirty' => 'bg-amber-500',
+                                'Cleaning' => 'bg-violet-500',
+                                'Maintenance' => 'bg-amber-500',
                                 default => 'bg-slate-500',
                             };
 

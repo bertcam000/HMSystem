@@ -35,13 +35,21 @@ class RoomController extends Controller
 
         $rooms = $query->paginate(10)->withQueryString();
 
+        $roomStatus = [
+            'Available' => Room::where('status', 'Available')->count(),
+            'Occupied' => Room::where('status', 'Occupied')->count(),
+            'Dirty' => Room::where('status', 'Dirty')->count(),
+            'Cleaning' => Room::where('status', 'Cleaning')->count(),
+            'Maintenance' => Room::where('status', 'Maintenance')->count(),
+        ];
+
         // For dropdown + counts
         $roomTypes = RoomType::withCount('rooms')->get();
         $roomCount = Room::count();
 
         return view(
             'pages.room.room-list',
-            compact('rooms', 'roomTypes', 'roomCount')
+            compact('rooms', 'roomTypes', 'roomCount', 'roomStatus')
         );
     }
 

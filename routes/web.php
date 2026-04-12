@@ -3,13 +3,16 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\GuestController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\CheckInController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\CheckOutController;
-use App\Http\Controllers\NightAuditController;
 use App\Http\Controllers\RoomTypeController;
-use App\Http\Controllers\ReportController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\NightAuditController;
+use App\Http\Controllers\HousekeepingController;
+use App\Http\Controllers\HousekeepingTaskController;
 
 Route::view('/', 'welcome');
 
@@ -136,7 +139,8 @@ Route::middleware(['auth', 'role:admin,staff'])->group(function () {
 
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
-    Route::view('/dashboard', 'pages.dashboard.index')->name('dashboard');
+    // Route::view('/dashboard', 'pages.dashboard.index')->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::view('/housekeeping', 'pages.housekeeping.index')->name('housekeeping');
     // Route::view('/invoices', 'pages.invoices.index')->name('invoices');
 
@@ -168,5 +172,18 @@ Route::post('/night-audit/run', [NightAuditController::class, 'run'])->name('nig
 Route::get('/night-audit/history', [NightAuditController::class, 'history'])->name('night-audit.history');
 Route::get('/night-audit/{nightAudit}', [NightAuditController::class, 'show'])
     ->name('night-audit.show');
+
+// Housekeeping
+
+Route::get('/housekeeping', [HousekeepingController::class, 'index'])->name('housekeeping.index');
+Route::patch('/housekeeping/{room}/start-cleaning', [HousekeepingController::class, 'startCleaning'])->name('housekeeping.start-cleaning');
+Route::patch('/housekeeping/{room}/mark-clean', [HousekeepingController::class, 'markClean'])->name('housekeeping.mark-clean');
+Route::patch('/housekeeping/{room}/mark-maintenance', [HousekeepingController::class, 'markMaintenance'])->name('housekeeping.mark-maintenance');
+Route::patch('/housekeeping/{room}/mark-dirty', [HousekeepingController::class, 'markDirty'])->name('housekeeping.mark-dirty');
+
+
+Route::get('/housekeeping', [HousekeepingTaskController::class, 'index'])->name('housekeeping.index');
+Route::post('/housekeeping/tasks', [HousekeepingTaskController::class, 'store'])->name('housekeeping.tasks.store');
+Route::patch('/housekeeping/tasks/{task}', [HousekeepingTaskController::class, 'update'])->name('housekeeping.tasks.update');
 
 require __DIR__.'/auth.php';

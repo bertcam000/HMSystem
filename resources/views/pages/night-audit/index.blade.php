@@ -8,6 +8,58 @@
         <x-notification :message="session('error')" type="error" />
     @endif
     
+    @if($blockedGuests->isNotEmpty())
+        <div class="mb-6 rounded-[30px] border border-red-200 bg-red-50 p-5 shadow-sm">
+            <div class="flex items-start justify-between gap-4">
+                <div>
+                    <div class="mb-2 inline-flex items-center gap-2 rounded-full bg-red-100 px-3 py-1 text-xs font-semibold text-red-700">
+                        <span class="h-2 w-2 rounded-full bg-red-500"></span>
+                        Audit Blocked
+                    </div>
+
+                    <h3 class="text-lg font-bold text-red-800">
+                        Night Audit cannot proceed
+                    </h3>
+
+                    <p class="mt-1 text-sm text-red-700">
+                        {{ $blockedGuests->count() }} checked-in guest(s) scheduled to check out today still have unpaid balances.
+                    </p>
+                </div>
+            </div>
+
+            <div class="mt-5 max-h-72 space-y-3 overflow-y-auto pr-2">
+                @foreach($blockedGuests as $booking)
+                    <div class="rounded-2xl border border-red-200 bg-white px-4 py-4">
+                        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                            <div>
+                                <p class="text-sm font-semibold text-slate-900">
+                                    {{ $booking->guest->first_name ?? '' }} {{ $booking->guest->last_name ?? '' }}
+                                </p>
+                                <p class="mt-1 text-xs text-slate-500">
+                                    {{ $booking->booking_code }} • Check-out: {{ $booking->check_out_date->format('M d, Y') }}
+                                </p>
+                            </div>
+
+                            <div class="flex items-center gap-3">
+                                <div class="text-right">
+                                    <p class="text-sm font-bold text-red-600">
+                                        ₱{{ number_format($booking->balance, 2) }}
+                                    </p>
+                                    <p class="text-xs text-slate-400">Outstanding Balance</p>
+                                </div>
+
+                                <a href="{{ route('hms.check-out.show', $booking) }}"
+                                class="inline-flex items-center justify-center rounded-xl bg-slate-900 px-4 py-2 text-xs font-semibold text-white transition hover:bg-slate-700">
+                                    View Checkout
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    @endif
+    
     <div class="min-h-screen">
         <div class="">
 
@@ -42,11 +94,21 @@
                         @csrf
                         <input type="hidden" name="audit_date" value="{{ $today->format('Y-m-d') }}">
 
-                        <button
-                            type="submit"
-                            class="inline-flex items-center justify-center rounded-2xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-700">
-                            Run Night Audit
-                        </button>
+                        <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
+                            <button
+                                type="submit"
+                                @disabled($blockedGuests->isNotEmpty())
+                                class="inline-flex items-center justify-center rounded-2xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-slate-900"
+                            >
+                                Run Night Audit
+                            </button>
+
+                            @if($blockedGuests->isNotEmpty())
+                                <p class="text-sm font-medium text-red-600">
+                                    Resolve unpaid check-outs first.
+                                </p>
+                            @endif
+                        </div>
                     </form>
                 </div>
             </div>

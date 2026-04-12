@@ -25,6 +25,8 @@ class CheckInController extends Controller
 
     public function store(Request $request, Booking $booking)
     {
+        $booking->load(['payments', 'rooms']);
+
         $currentBalance = round((float) ($booking->balance ?? 0), 2);
 
         if ($currentBalance < 0.01) {
@@ -60,10 +62,10 @@ class CheckInController extends Controller
 
         DB::transaction(function () use ($validated, $booking) {
             $booking->refresh();
+            $booking->load(['payments', 'rooms']);
 
             $paymentAmount = round((float) ($validated['amount'] ?? 0), 2);
 
-            // Create payment only if may actual amount
             if ($paymentAmount > 0) {
                 Payment::create([
                     'booking_id' => $booking->id,
@@ -77,6 +79,7 @@ class CheckInController extends Controller
             }
 
             $booking->refresh();
+            $booking->load(['payments', 'rooms']);
 
             $paidAmount = round((float) $booking->payments()->sum('amount'), 2);
             $totalPrice = round((float) $booking->total_price, 2);
@@ -97,14 +100,28 @@ class CheckInController extends Controller
             $bookingStatus = $booking->status;
             $checkedInAt = $booking->checked_in_at;
 
-            // Since this is CHECK-IN controller:
-            // if fully paid na and allowed status, set to checked_in
             if (
                 in_array(strtolower($booking->status), ['reserved', 'confirmed']) &&
                 $balance <= 0
             ) {
+                if ($booking->rooms->isEmpty()) {
+                    abort(422, 'This booking has no assigned room.');
+                }
+
+                foreach ($booking->rooms as $room) {
+                    if (strtolower($room->status) !== 'available') {
+                        abort(422, 'One or more assigned rooms are not available for check-in.');
+                    }
+                }
+
                 $bookingStatus = 'checked_in';
                 $checkedInAt = now();
+
+                foreach ($booking->rooms as $room) {
+                    $room->update([
+                        'status' => 'Occupied',
+                    ]);
+                }
             }
 
             $booking->update([

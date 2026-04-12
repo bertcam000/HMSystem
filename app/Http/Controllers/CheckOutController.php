@@ -62,7 +62,7 @@ class CheckOutController extends Controller
 
                 if ($lockedRoom) {
                     $lockedRoom->update([
-                        'status' => 'Available',
+                        'status' => 'Dirty',
                     ]);
                 }
             }
