@@ -3,6 +3,8 @@
 use App\Livewire\Forms\LoginForm;
 use Illuminate\Support\Facades\Session;
 use Livewire\Attributes\Layout;
+use Illuminate\Validation\ValidationException;
+use App\Models\User;
 use Livewire\Volt\Component;
 
 new #[Layout('components.layouts.guest-layout')] class extends Component
@@ -15,6 +17,14 @@ new #[Layout('components.layouts.guest-layout')] class extends Component
     public function login(): void
     {
         $this->validate();
+
+        $user = User::where('email', $this->form->email)->first();
+
+        if ($user && strtolower($user->status) !== 'active') {
+            throw ValidationException::withMessages([
+                'form.email' => 'Account is inactive.',
+            ]);
+        }
 
         $this->form->authenticate();
 
@@ -29,7 +39,7 @@ new #[Layout('components.layouts.guest-layout')] class extends Component
         };
 
         $this->redirect(route($redirectRoute), navigate: false);
-        }
+    }
 }; ?>
 
 {{-- <div>

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminUserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\GuestController;
@@ -100,7 +101,7 @@ Route::view('profile', 'profile')
 // });
 
 
-Route::middleware(['auth', 'role:admin,staff'])->group(function () {
+Route::middleware(['auth', 'role:admin,housekeeping'])->group(function () {
     Route::get('/rooms', [RoomController::class, 'index'])->name('rooms.index');
     Route::view('/events', 'pages.event.index')->name('events.index');
 
@@ -134,6 +135,26 @@ Route::middleware(['auth', 'role:admin,staff'])->group(function () {
                 'label' => $guest->first_name . ' ' . $guest->last_name,
             ]);
     })->name('guest.search');
+
+
+
+
+    // CHECK IN
+Route::get('/check-in/{booking}', [CheckInController::class, 'show'])->name('check-in.show');
+Route::post('/booking/{booking}/payment', [CheckInController::class, 'store'])->name('booking.payment.store');
+// CHECK OUT
+Route::get('/check-out/{booking}', [CheckOutController::class, 'show'])->name('hms.check-out.show');
+Route::post('/hms/check-out/{booking}', [CheckOutController::class, 'store'])->name('hms.check-out.store');
+// INVOICES
+Route::get('/invoices', [InvoiceController::class, 'index'])->name('invoices.index');
+Route::get('/invoices/{booking}', [InvoiceController::class, 'show'])->name('invoices.show');
+// REPORT
+Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+
+// HOUSEKEEPING
+Route::get('/housekeeping', [HousekeepingTaskController::class, 'index'])->name('housekeeping.index');
+Route::post('/housekeeping/tasks', [HousekeepingTaskController::class, 'store'])->name('housekeeping.tasks.store');
+Route::patch('/housekeeping/tasks/{task}', [HousekeepingTaskController::class, 'update'])->name('housekeeping.tasks.update');
     
 });
 
@@ -141,49 +162,36 @@ Route::middleware(['auth', 'role:admin,staff'])->group(function () {
 Route::middleware(['auth', 'role:admin'])->group(function () {
     // Route::view('/dashboard', 'pages.dashboard.index')->name('dashboard');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::view('/housekeeping', 'pages.housekeeping.index')->name('housekeeping');
     // Route::view('/invoices', 'pages.invoices.index')->name('invoices');
 
     Route::get('/room-type', [RoomTypeController::class, 'index'])->name('room-type.index');
     Route::delete('/rooms/delete/{roomType}', [RoomTypeController::class, 'destroy'])->name('room-type.delete');
 
     Route::delete('/guest/delete/{guest}', [GuestController::class, 'destroy'])->name('guest.delete');
+
+    // NIGHT AUDIT
+    Route::get('/night-audit', [NightAuditController::class, 'index'])->name('night-audit.index');
+    Route::post('/night-audit/run', [NightAuditController::class, 'run'])->name('night-audit.run');
+    Route::get('/night-audit/history', [NightAuditController::class, 'history'])->name('night-audit.history');
+    Route::get('/night-audit/{nightAudit}', [NightAuditController::class, 'show'])->name('night-audit.show');
+
+    // ACCOUNT CREATION
+
+    Route::get('/admin/users/create', [AdminUserController::class, 'create'])->name('admin.users.create');
+    Route::post('/admin/users', [AdminUserController::class, 'store'])->name('admin.users.store');
 });
 
 
-// Route::view('/test', 'pages.check-out.index')->name('check-in');
-Route::get('/check-in/{booking}', [CheckInController::class, 'show'])->name('check-in.show');
-Route::post('/booking/{booking}/payment', [CheckInController::class, 'store'])
-    ->name('booking.payment.store');
 
-
-Route::get('/check-out/{booking}', [CheckOutController::class, 'show'])->name('hms.check-out.show');
-Route::post('/hms/check-out/{booking}', [CheckOutController::class, 'store'])->name('hms.check-out.store');
-
-
-Route::get('/invoices', [InvoiceController::class, 'index'])->name('invoices.index');
-Route::get('/invoices/{booking}', [InvoiceController::class, 'show'])->name('invoices.show');
-
-Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
-
-
-Route::get('/night-audit', [NightAuditController::class, 'index'])->name('night-audit.index');
-Route::post('/night-audit/run', [NightAuditController::class, 'run'])->name('night-audit.run');
-Route::get('/night-audit/history', [NightAuditController::class, 'history'])->name('night-audit.history');
-Route::get('/night-audit/{nightAudit}', [NightAuditController::class, 'show'])
-    ->name('night-audit.show');
 
 // Housekeeping
+// Route::get('/housekeeping', [HousekeepingController::class, 'index'])->name('housekeeping.index');
+// Route::patch('/housekeeping/{room}/start-cleaning', [HousekeepingController::class, 'startCleaning'])->name('housekeeping.start-cleaning');
+// Route::patch('/housekeeping/{room}/mark-clean', [HousekeepingController::class, 'markClean'])->name('housekeeping.mark-clean');
+// Route::patch('/housekeeping/{room}/mark-maintenance', [HousekeepingController::class, 'markMaintenance'])->name('housekeeping.mark-maintenance');
+// Route::patch('/housekeeping/{room}/mark-dirty', [HousekeepingController::class, 'markDirty'])->name('housekeeping.mark-dirty');
 
-Route::get('/housekeeping', [HousekeepingController::class, 'index'])->name('housekeeping.index');
-Route::patch('/housekeeping/{room}/start-cleaning', [HousekeepingController::class, 'startCleaning'])->name('housekeeping.start-cleaning');
-Route::patch('/housekeeping/{room}/mark-clean', [HousekeepingController::class, 'markClean'])->name('housekeeping.mark-clean');
-Route::patch('/housekeeping/{room}/mark-maintenance', [HousekeepingController::class, 'markMaintenance'])->name('housekeeping.mark-maintenance');
-Route::patch('/housekeeping/{room}/mark-dirty', [HousekeepingController::class, 'markDirty'])->name('housekeeping.mark-dirty');
 
 
-Route::get('/housekeeping', [HousekeepingTaskController::class, 'index'])->name('housekeeping.index');
-Route::post('/housekeeping/tasks', [HousekeepingTaskController::class, 'store'])->name('housekeeping.tasks.store');
-Route::patch('/housekeeping/tasks/{task}', [HousekeepingTaskController::class, 'update'])->name('housekeeping.tasks.update');
 
 require __DIR__.'/auth.php';
