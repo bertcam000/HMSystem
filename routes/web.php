@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminUserController;
+use App\Http\Controllers\AvailabilityController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\GuestController;
@@ -9,13 +10,18 @@ use App\Http\Controllers\BookingController;
 use App\Http\Controllers\CheckInController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\CheckOutController;
+use App\Http\Controllers\CheckoutPageController;
 use App\Http\Controllers\RoomTypeController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\NightAuditController;
 use App\Http\Controllers\HousekeepingController;
 use App\Http\Controllers\HousekeepingTaskController;
+use App\Http\Controllers\PublicReservationController;
+use App\Http\Controllers\ConfirmationController;
+use App\Http\Controllers\HomeController;
 
-Route::view('/', 'welcome');
+// Route::view('/', 'public.index');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 // Route::view('dashboard', 'dashboard')
 //     ->middleware(['auth', 'verified'])
@@ -25,81 +31,6 @@ Route::view('/', 'welcome');
 Route::view('profile', 'profile')
     ->middleware(['auth'])
     ->name('profile');
-
-// Route::middleware(['auth', 'role:admin,staff'])->group(function () {
-//     // Dashboard
-//     Route::view('dashboard', 'pages.dashboard.index')->name('dashboard');
-//     // Route::view('rooms', 'pages.room.index');
-//     Route::view('housekeeping', 'pages.housekeeping.index');
-//     Route::view('invoices', 'pages.invoices.index');
-//     // RoomType
-//     Route::get('/room-type', [RoomTypeController::class, 'index']);
-//     Route::delete('/rooms/delete/{roomType}', [RoomTypeController::class, 'destroy']);
-
-//     // Guests
-//     Route::get('/guests', [GuestController::class, 'index']);
-//     Route::get('/guest/edit/{guest}', [GuestController::class, 'edit']);
-//     Route::put('/guest/update/{guest}', [GuestController::class, 'update'])->name('guest.update');
-//     Route::delete('/guest/delete/{guest}', [GuestController::class, 'destroy']);
-
-//     Route::get('/rooms', [RoomController::class, 'index']);
-
-//     // Events
-//     Route::view('events', 'pages.event.index');
-
-//     // booking
-//     Route::get('/bookings', [BookingController::class, 'index']);
-//     Route::view('/show-booking', 'pages.booking.show');
-//     Route::view('/book', 'pages.booking.booking');
-//     Route::get('/booking/result/{booking}', [BookingController::class, 'show']);
-//     Route::get('/booking/check-in/{booking}', [BookingController::class, 'checkIn']);
-//     Route::get('/booking/check-out/{booking}', [BookingController::class, 'checkOut']);
-    
-// });
-
-
-// Route::middleware(['auth', 'role:staff'])->group(function () {
-//     // Rooms
-//     Route::get('/rooms', [RoomController::class, 'index']);
-
-//     // Events
-//     Route::view('events', 'pages.event.index');
-
-//     // booking
-//     Route::get('/bookings', [BookingController::class, 'index']);
-//     Route::view('/show-booking', 'pages.booking.show');
-//     Route::view('/book', 'pages.booking.booking');
-//     Route::get('/booking/result/{booking}', [BookingController::class, 'show']);
-//     Route::get('/booking/check-in/{booking}', [BookingController::class, 'checkIn']);
-//     Route::get('/booking/check-out/{booking}', [BookingController::class, 'checkOut']);
-
-//     // Guests
-//     Route::get('/guests', [GuestController::class, 'index']);
-//     Route::get('/guest/edit/{guest}', [GuestController::class, 'edit']);
-//     Route::put('/guest/update/{guest}', [GuestController::class, 'update'])->name('guest.update');
-//     Route::delete('/guest/delete/{guest}', [GuestController::class, 'destroy']);
-
-//     // 
-//     Route::get('/guest/search', function (\Illuminate\Http\Request $request) {
-//         return \App\Models\Guest::query()
-//             ->when($request->search, function ($q) use ($request) {
-//                 $search = $request->search;
-
-//                 $q->where(function ($query) use ($search) {
-//                     $query->where('first_name', 'like', "%{$search}%")
-//                         ->orWhere('last_name', 'like', "%{$search}%")
-//                         ->orWhereRaw("first_name || ' ' || last_name LIKE ?", ["%{$search}%"]);
-//                 });
-//             })
-//             ->limit(10)
-//             ->get()
-//             ->map(fn ($guest) => [
-//                 'id' => $guest->id,
-//                 'label' => $guest->first_name . ' ' . $guest->last_name,
-//             ]);
-//     })->name('guest.search');
-// });
-
 
 Route::middleware(['auth', 'role:admin,housekeeping'])->group(function () {
     Route::get('/rooms', [RoomController::class, 'index'])->name('rooms.index');
@@ -187,6 +118,19 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
 
 
+Route::get('/offers', [PublicReservationController::class, 'index']);
+
+Route::get('/availability', [AvailabilityController::class, 'index'])->name('availability.index');
+Route::get('/availability/check', [AvailabilityController::class, 'check'])->name('availability.check');
+
+Route::get('/checkout', [CheckoutPageController::class, 'index'])->name('checkout.index');
+Route::post('/checkout/submit', [CheckoutPageController::class, 'submit'])->name('checkout.submit');
+
+Route::get('/confirmation', [ConfirmationController::class, 'index'])->name('confirmation.index');
+
+
+// Route::get('/checkout', [CheckoutPageController::class, 'index'])->name('checkout.index');
+// Route::post('/checkout/submit', [CheckoutPageController::class, 'submit'])->name('checkout.submit');
 
 // Housekeeping
 // Route::get('/housekeeping', [HousekeepingController::class, 'index'])->name('housekeeping.index');

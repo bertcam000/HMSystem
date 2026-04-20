@@ -12,4 +12,11 @@ class Guest extends Model
     {
         return $this->hasMany(Booking::class);
     }
+
+    public function rooms()
+    {
+        return $this->belongsToMany(Room::class, 'booking_rooms')
+            ->withPivot('total_price')
+            ->withTimestamps();
+    }
 }

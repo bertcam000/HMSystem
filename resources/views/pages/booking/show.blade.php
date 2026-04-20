@@ -220,7 +220,7 @@
                             @endif --}}
 
 
-                            @if(in_array($booking->status, ['reserved', 'confirmed']))
+                            @if(in_array($booking->status, ['reserved', 'confirmed', 'pending']))
                                 {{-- <a href="/booking/check-in/{{ $booking->id }}"
                                      class="text-center rounded-2xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700">
                                     Confirm Check In
