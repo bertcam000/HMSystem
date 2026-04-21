@@ -115,7 +115,7 @@ class BookingController extends Controller
 
     public function cancel(Request $request, Booking $booking)
     {
-        if (! in_array($booking->status, ['reserved', 'confirmed'])) {
+        if (! in_array($booking->status, ['reserved', 'confirmed', 'pending'])) {
             return back()->with('error', 'This booking can no longer be cancelled.');
         }
 

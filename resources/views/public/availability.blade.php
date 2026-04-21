@@ -68,7 +68,7 @@
 
         <div class="shell-grid">
             <div class="space-y-6">
-                <section class="panel rounded-[28px] p-8 md:p-9">
+                <section class="panel rounded-[28px] p-8 md:p-9" x-show="roomType" x-cloak>
                     <div class="space-y-2 mb-8">
                         <h2 class="booking-section-title">Select Your Dates</h2>
                         <p class="booking-copy">Choose your check-in and check-out dates to validate room type availability.</p>
@@ -152,7 +152,7 @@
                                             : 'https://via.placeholder.com/1200x800?text=Room+Type';
                                     @endphp
 
-                                    <div class="card rounded-3xl overflow-hidden">
+                                    <div class="card rounded-3xl overflow-hidden flex flex-col justify-between">
                                         <div class="relative h-56 overflow-hidden">
                                             <img src="{{ $imageUrl }}" alt="{{ $type->name }}" class="w-full h-full object-cover">
                                             <div class="absolute top-4 left-4">
@@ -216,7 +216,7 @@
                 @endif
             </div>
 
-            <aside class="panel rounded-[28px] p-5 md:p-6 space-y-4 xl:sticky xl:top-24 xl:self-start">
+            <aside class="panel rounded-[28px] p-5 md:p-6 space-y-4 xl:sticky xl:top-24 xl:self-start" x-show="roomType" x-cloak>
                 <div>
                     <p class="booking-kicker">Live Folio</p>
                     <h2 class="booking-summary-title mt-2">Reservation Summary</h2>
