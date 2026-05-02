@@ -19,6 +19,9 @@ use App\Http\Controllers\HousekeepingTaskController;
 use App\Http\Controllers\PublicReservationController;
 use App\Http\Controllers\ConfirmationController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\RfidCardController;
+use App\Http\Controllers\RfidCheckInController;
+use App\Http\Controllers\RfidCheckOutController;
 
 // Route::view('/', 'public.index');
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -105,6 +108,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::post('/night-audit/run', [NightAuditController::class, 'run'])->name('night-audit.run');
     Route::get('/night-audit/history', [NightAuditController::class, 'history'])->name('night-audit.history');
     Route::get('/night-audit/{nightAudit}', [NightAuditController::class, 'show'])->name('night-audit.show');
+    Route::get('/reports/weekly', [ReportController::class, 'weekly'])->name('reports.weekly');
 
     // ACCOUNT CREATION
 
@@ -114,6 +118,18 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/users/{user}/edit', [AdminUserController::class, 'edit'])->name('admin.users.edit');
     Route::put('/admin/users/{user}', [AdminUserController::class, 'update'])->name('admin.users.update');
     Route::patch('/admin/users/{user}/toggle-status', [AdminUserController::class, 'toggleStatus'])->name('admin.users.toggle-status');
+
+
+    // RFID
+    Route::resource('rfid-cards', RfidCardController::class);
+
+    Route::get('/rfid-check-in', [RfidCheckInController::class, 'index'])->name('rfid.check-in.index');
+    Route::post('/rfid-check-in/{booking}', [RfidCheckInController::class, 'store'])->name('rfid.check-in.store');
+
+    Route::get('/rfid-check-out', [RfidCheckOutController::class, 'index'])->name('rfid.check-out.index');
+    Route::get('/rfid-check-out/search', [RfidCheckOutController::class, 'search'])->name('rfid.check-out.search');
+    Route::post('/rfid-check-out/{booking}', [RfidCheckOutController::class, 'checkout'])->name('rfid.check-out.checkout');
+    
 });
 
 

@@ -160,12 +160,44 @@
                     </div>
                 </div>
             </a>
+            <a  href="/reports" class=" px-3 py-3    {{ request()->is('reports') ? 'bg-[#f8fcfc] text-black rounded-l-full' : '' }} rounded-l-full hover:bg-[#f8fcfc] hover:text-black" x-data="{dropdown1:false}">
+                <div class="flex justify-between items-center ">
+                    <div class=" flex items-center gap-4 px-2">
+                        <x-icon name="building-office" />
+                        Reports
+                    </div>
+                </div>
+            </a>
             @endcan
             <a wire:navigate  href="/guests" class=" px-3 py-3    {{ request()->is('guests') ? 'bg-[#f8fcfc] text-black rounded-l-full' : '' }} rounded-l-full hover:bg-[#f8fcfc] hover:text-black" x-data="{dropdown1:false}">
                 <div  class="flex justify-between items-center ">
                     <div class=" flex items-center gap-4 px-2">
                         <x-icon name="user-group" />
                         Guests
+                    </div>
+                </div>
+            </a>
+            <a wire:navigate  href="/rfid-cards" class=" px-3 py-3    {{ request()->is('rfid-cards') ? 'bg-[#f8fcfc] text-black rounded-l-full' : '' }} rounded-l-full hover:bg-[#f8fcfc] hover:text-black" x-data="{dropdown1:false}">
+                <div  class="flex justify-between items-center ">
+                    <div class=" flex items-center gap-4 px-2">
+                        <x-icon name="user-group" />
+                        RFID
+                    </div>
+                </div>
+            </a>
+            <a wire:navigate  href="/rfid-check-in" class=" px-3 py-3    {{ request()->is('rfid-check-in') ? 'bg-[#f8fcfc] text-black rounded-l-full' : '' }} rounded-l-full hover:bg-[#f8fcfc] hover:text-black" x-data="{dropdown1:false}">
+                <div  class="flex justify-between items-center ">
+                    <div class=" flex items-center gap-4 px-2">
+                        <x-icon name="user-group" />
+                        RFID Check in
+                    </div>
+                </div>
+            </a>
+            <a wire:navigate  href="/rfid-check-out" class=" px-3 py-3    {{ request()->is('rfid-check-out') ? 'bg-[#f8fcfc] text-black rounded-l-full' : '' }} rounded-l-full hover:bg-[#f8fcfc] hover:text-black" x-data="{dropdown1:false}">
+                <div  class="flex justify-between items-center ">
+                    <div class=" flex items-center gap-4 px-2">
+                        <x-icon name="user-group" />
+                        RFID Check out
                     </div>
                 </div>
             </a>

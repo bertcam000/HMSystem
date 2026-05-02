@@ -26,107 +26,185 @@ class NightAuditController extends Controller
             ->where('balance', '>', 0)
             ->get();
 
+        // Reporting & Compliance
+        $totalReservations = \App\Models\Booking::whereDate('created_at', $today)
+            ->count();
+
+        $totalCancellations = \App\Models\Booking::where('status', 'cancelled')
+            ->whereDate('updated_at', $today)
+            ->count();
+
+        $totalPayments = \App\Models\Payment::whereDate('created_at', $today)
+            ->sum('amount');
+
+        // VAT Compliance - assuming VAT-inclusive payments
+        $vatRate = 0.12;
+
+        $grossSales = round((float) $totalPayments, 2);
+        $vatableSales = round($grossSales / (1 + $vatRate), 2);
+        $vatAmount = round($grossSales - $vatableSales, 2);
+        $netSales = $vatableSales;
+
         return view('pages.night-audit.index', [
             'today' => $today,
             'latestAudit' => $latestAudit,
             'blockedGuests' => $blockedGuests,
+
+            // Reporting & Compliance
+            'totalReservations' => $totalReservations,
+            'totalCancellations' => $totalCancellations,
+            'totalPayments' => $totalPayments,
+            'grossSales' => $grossSales,
+            'vatableSales' => $vatableSales,
+            'vatAmount' => $vatAmount,
+            'netSales' => $netSales,
+
             ...$data,
         ]);
     }
 
     public function run(Request $request)
-{
-    $auditDate = $request->filled('audit_date')
-        ? \Carbon\Carbon::parse($request->audit_date)->startOfDay()
-        : \Carbon\Carbon::today();
+    {
+        $auditDate = $request->filled('audit_date')
+            ? \Carbon\Carbon::parse($request->audit_date)->startOfDay()
+            : \Carbon\Carbon::today();
 
-    return \Illuminate\Support\Facades\DB::transaction(function () use ($auditDate) {
-        $existing = \App\Models\NightAudit::whereDate('audit_date', $auditDate)
-            ->lockForUpdate()
-            ->first();
+        return \Illuminate\Support\Facades\DB::transaction(function () use ($auditDate) {
+            $existing = \App\Models\NightAudit::whereDate('audit_date', $auditDate)
+                ->lockForUpdate()
+                ->first();
 
-        if ($existing) {
+            if ($existing) {
+                return redirect()
+                    ->route('night-audit.index')
+                    ->with('error', 'Night audit for this date has already been completed.');
+            }
+
+            $unpaidCheckouts = \App\Models\Booking::with('guest')
+                ->whereDate('check_out_date', $auditDate)
+                ->where('status', 'checked_in')
+                ->where('balance', '>', 0)
+                ->get();
+
+            if ($unpaidCheckouts->isNotEmpty()) {
+                $guestNames = $unpaidCheckouts->map(function ($booking) {
+                    return trim(
+                        ($booking->guest->first_name ?? '') . ' ' . ($booking->guest->last_name ?? '')
+                    ) . ' (' . $booking->booking_code . ')';
+                })->implode(', ');
+
+                return redirect()
+                    ->route('night-audit.index')
+                    ->with('error', 'Night audit blocked. There are unpaid check-outs for this date: ' . $guestNames);
+            }
+
+            $data = $this->buildAuditSnapshot($auditDate);
+
+            /**
+             * Reporting & Compliance
+             */
+            $totalReservations = \App\Models\Booking::whereDate('created_at', $auditDate)
+                ->count();
+
+            $totalCancellations = \App\Models\Booking::where('status', 'cancelled')
+                ->whereDate('updated_at', $auditDate)
+                ->count();
+
+            $totalPayments = \App\Models\Payment::whereDate('created_at', $auditDate)
+                ->sum('amount');
+
+            /**
+             * VAT Compliance
+             * Assumption: prices/payments are VAT-inclusive.
+             * PH VAT = 12%
+             */
+            $vatRate = 0.12;
+
+            $grossSales = round((float) $totalPayments, 2);
+            $vatableSales = round($grossSales / (1 + $vatRate), 2);
+            $vatAmount = round($grossSales - $vatableSales, 2);
+            $netSales = $vatableSales;
+
+            $summary = [
+                'reporting_compliance' => [
+                    'total_reservations' => $totalReservations,
+                    'total_cancellations' => $totalCancellations,
+                    'total_payments' => $totalPayments,
+                    'gross_sales' => $grossSales,
+                    'vat_rate' => $vatRate,
+                    'vatable_sales' => $vatableSales,
+                    'vat_amount' => $vatAmount,
+                    'net_sales' => $netSales,
+                ],
+
+                'pending_checkins' => $data['pendingCheckIns']->map(function ($booking) {
+                    return [
+                        'id' => $booking->id,
+                        'booking_code' => $booking->booking_code,
+                        'guest' => trim(optional($booking->guest)->first_name . ' ' . optional($booking->guest)->last_name),
+                        'status' => $booking->status,
+                        'check_in_date' => optional($booking->check_in_date)->format('Y-m-d'),
+                    ];
+                })->values()->toArray(),
+
+                'pending_checkouts' => $data['pendingCheckOuts']->map(function ($booking) {
+                    return [
+                        'id' => $booking->id,
+                        'booking_code' => $booking->booking_code,
+                        'guest' => trim(optional($booking->guest)->first_name . ' ' . optional($booking->guest)->last_name),
+                        'status' => $booking->status,
+                        'balance' => (float) $booking->balance,
+                        'check_out_date' => optional($booking->check_out_date)->format('Y-m-d'),
+                    ];
+                })->values()->toArray(),
+
+                'unsettled_accounts' => $data['unsettledAccounts']->map(function ($booking) {
+                    return [
+                        'id' => $booking->id,
+                        'booking_code' => $booking->booking_code,
+                        'guest' => trim(optional($booking->guest)->first_name . ' ' . optional($booking->guest)->last_name),
+                        'status' => $booking->status,
+                        'balance' => (float) $booking->balance,
+                    ];
+                })->values()->toArray(),
+            ];
+
+            \App\Models\NightAudit::create([
+                'audit_date' => $auditDate->toDateString(),
+
+                'arrivals_count' => $data['arrivalsToday'],
+                'departures_count' => $data['departuresToday'],
+                'in_house_count' => $data['inHouseGuests'],
+
+                'occupied_rooms' => $data['occupiedRooms'],
+                'available_rooms' => $data['availableRooms'],
+
+                'daily_revenue' => $grossSales,
+                'outstanding_balance' => $data['outstandingBalances'],
+
+                'pending_checkins_count' => $data['pendingCheckIns']->count(),
+                'pending_checkouts_count' => $data['pendingCheckOuts']->count(),
+                'unsettled_accounts_count' => $data['unsettledAccounts']->count(),
+
+                // Reporting & Compliance
+                'total_reservations' => $totalReservations,
+                'total_cancellations' => $totalCancellations,
+                'total_payments' => $totalPayments,
+                'vatable_sales' => $vatableSales,
+                'vat_amount' => $vatAmount,
+                'net_sales' => $netSales,
+
+                'summary' => $summary,
+                'audited_at' => now(),
+                'status' => 'completed',
+                'audited_by' => \Illuminate\Support\Facades\Auth::id(),
+            ]);
+
             return redirect()
                 ->route('night-audit.index')
-                ->with('error', 'Night audit for this date has already been completed.');
-        }
-
-        $unpaidCheckouts = \App\Models\Booking::with('guest')
-            ->whereDate('check_out_date', $auditDate)
-            ->where('status', 'checked_in')
-            ->where('balance', '>', 0)
-            ->get();
-
-        if ($unpaidCheckouts->isNotEmpty()) {
-            $guestNames = $unpaidCheckouts->map(function ($booking) {
-                return trim(
-                    ($booking->guest->first_name ?? '') . ' ' . ($booking->guest->last_name ?? '')
-                ) . ' (' . $booking->booking_code . ')';
-            })->implode(', ');
-
-            return redirect()
-                ->route('night-audit.index')
-                ->with('error', 'Night audit blocked. There are unpaid check-outs for this date: ' . $guestNames);
-        }
-
-        $data = $this->buildAuditSnapshot($auditDate);
-
-        $summary = [
-            'pending_checkins' => $data['pendingCheckIns']->map(function ($booking) {
-                return [
-                    'id' => $booking->id,
-                    'booking_code' => $booking->booking_code,
-                    'guest' => optional($booking->guest)->first_name . ' ' . optional($booking->guest)->last_name,
-                    'status' => $booking->status,
-                    'check_in_date' => optional($booking->check_in_date)->format('Y-m-d'),
-                ];
-            })->values()->toArray(),
-
-            'pending_checkouts' => $data['pendingCheckOuts']->map(function ($booking) {
-                return [
-                    'id' => $booking->id,
-                    'booking_code' => $booking->booking_code,
-                    'guest' => optional($booking->guest)->first_name . ' ' . optional($booking->guest)->last_name,
-                    'status' => $booking->status,
-                    'balance' => (float) $booking->balance,
-                    'check_out_date' => optional($booking->check_out_date)->format('Y-m-d'),
-                ];
-            })->values()->toArray(),
-
-            'unsettled_accounts' => $data['unsettledAccounts']->map(function ($booking) {
-                return [
-                    'id' => $booking->id,
-                    'booking_code' => $booking->booking_code,
-                    'guest' => optional($booking->guest)->first_name . ' ' . optional($booking->guest)->last_name,
-                    'status' => $booking->status,
-                    'balance' => (float) $booking->balance,
-                ];
-            })->values()->toArray(),
-        ];
-
-        \App\Models\NightAudit::create([
-            'audit_date' => $auditDate->toDateString(),
-            'arrivals_count' => $data['arrivalsToday'],
-            'departures_count' => $data['departuresToday'],
-            'in_house_count' => $data['inHouseGuests'],
-            'occupied_rooms' => $data['occupiedRooms'],
-            'available_rooms' => $data['availableRooms'],
-            'daily_revenue' => $data['dailyRevenue'],
-            'outstanding_balance' => $data['outstandingBalances'],
-            'pending_checkins_count' => $data['pendingCheckIns']->count(),
-            'pending_checkouts_count' => $data['pendingCheckOuts']->count(),
-            'unsettled_accounts_count' => $data['unsettledAccounts']->count(),
-            'summary' => $summary,
-            'audited_at' => now(),
-            'status' => 'completed',
-            'audited_by' => \Illuminate\Support\Facades\Auth::id(),
-        ]);
-
-        return redirect()
-            ->route('night-audit.index')
-            ->with('success', 'Night audit completed successfully.');
-    });
-}
+                ->with('success', 'Night audit completed successfully.');
+        });
+    }
 
     public function history()
     {

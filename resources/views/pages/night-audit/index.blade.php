@@ -138,6 +138,24 @@
                     <h3 class="mt-2 text-3xl font-bold tracking-tight text-rose-600">₱{{ number_format($outstandingBalances, 2) }}</h3>
                     <p class="mt-4 text-xs text-slate-400">Unsettled guest balances</p>
                 </div>
+
+                <div class="rounded-[28px] border p-5">
+                    <p class="text-sm text-slate-500">Total Reservations</p>
+                    <h3 class="text-2xl font-bold">{{ $totalReservations }}</h3>
+                </div>
+
+                <div class="rounded-[28px] border p-5">
+                    <p class="text-sm text-slate-500">Cancellations</p>
+                    <h3 class="text-2xl font-bold text-red-500">{{ $totalCancellations }}</h3>
+                </div>
+
+                <div class="rounded-[28px] border p-5">
+                    <p class="text-sm text-slate-500">VAT (12%)</p>
+                    <h3 class="text-2xl font-bold text-amber-600">
+                        ₱{{ number_format($vatAmount, 2) }}
+                    </h3>
+                </div>
+                
             </div>
 
             <!-- Operational cards -->

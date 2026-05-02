@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Models;
+use App\Models\RfidCard;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -67,5 +69,23 @@ class Booking extends Model
     protected $casts = [
         'check_in_date' => 'date',
         'check_out_date' => 'date',
+        'checked_in_at' => 'datetime',
+        'checked_out_at' => 'datetime',
     ];
+
+
+
+    public function rfidCard(): BelongsTo
+    {
+        return $this->belongsTo(RfidCard::class);
+    }
+
+    public function hasRfidCard(): bool
+    {
+        return ! is_null($this->rfid_card_id);
+    }
+    
+    
+    
+    
 }

@@ -22,6 +22,12 @@ class NightAudit extends Model
         'audited_at',
         'status',
         'audited_by',
+        'total_reservations',
+        'total_cancellations',
+        'total_payments',
+        'vatable_sales',
+        'vat_amount',
+        'net_sales',
     ];
 
     protected $casts = [
@@ -30,6 +36,10 @@ class NightAudit extends Model
         'daily_revenue' => 'decimal:2',
         'outstanding_balance' => 'decimal:2',
         'summary' => 'array',
+        'total_payments' => 'decimal:2',
+        'vatable_sales' => 'decimal:2',
+        'vat_amount' => 'decimal:2',
+        'net_sales' => 'decimal:2',
     ];
 
     public function user()
