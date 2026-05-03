@@ -27,7 +27,13 @@ class CheckInController extends Controller
     {
         $booking->load(['payments', 'rooms']);
 
-        $currentBalance = round((float) ($booking->balance ?? 0), 2);
+        // Compute real current balance:
+        // Room total + active folio charges - payments
+        $chargesTotal = round((float) $booking->activeFolioCharges()->sum('amount'), 2);
+        $paidAmount = round((float) $booking->payments()->sum('amount'), 2);
+
+        $grandTotal = round((float) $booking->total_price + $chargesTotal, 2);
+        $currentBalance = round($grandTotal - $paidAmount, 2);
 
         if ($currentBalance < 0.01) {
             $currentBalance = 0.00;
@@ -81,9 +87,12 @@ class CheckInController extends Controller
             $booking->refresh();
             $booking->load(['payments', 'rooms']);
 
+            // Recompute after saving payment
+            $chargesTotal = round((float) $booking->activeFolioCharges()->sum('amount'), 2);
             $paidAmount = round((float) $booking->payments()->sum('amount'), 2);
-            $totalPrice = round((float) $booking->total_price, 2);
-            $balance = round($totalPrice - $paidAmount, 2);
+
+            $grandTotal = round((float) $booking->total_price + $chargesTotal, 2);
+            $balance = round($grandTotal - $paidAmount, 2);
 
             if ($balance < 0.01) {
                 $balance = 0.00;
@@ -91,15 +100,16 @@ class CheckInController extends Controller
 
             $paymentStatus = 'unpaid';
 
-            if ($paidAmount > 0 && $paidAmount < $totalPrice) {
+            if ($paidAmount > 0 && $paidAmount < $grandTotal) {
                 $paymentStatus = 'partial';
-            } elseif ($paidAmount >= $totalPrice) {
+            } elseif ($paidAmount >= $grandTotal) {
                 $paymentStatus = 'paid';
             }
 
             $bookingStatus = $booking->status;
             $checkedInAt = $booking->checked_in_at;
 
+            // FULL PAYMENT REQUIRED BEFORE CHECK-IN
             if (
                 in_array(strtolower($booking->status), ['reserved', 'confirmed']) &&
                 $balance <= 0

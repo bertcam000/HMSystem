@@ -1,8 +1,7 @@
 <?php
 
-use App\Http\Controllers\AdminUserController;
-use App\Http\Controllers\AvailabilityController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\GuestController;
 use App\Http\Controllers\ReportController;
@@ -10,18 +9,23 @@ use App\Http\Controllers\BookingController;
 use App\Http\Controllers\CheckInController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\CheckOutController;
-use App\Http\Controllers\CheckoutPageController;
+use App\Http\Controllers\RfidCardController;
 use App\Http\Controllers\RoomTypeController;
+use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\NightAuditController;
+use App\Http\Controllers\AmenityItemController;
+use App\Http\Controllers\FolioChargeController;
+use App\Http\Controllers\RfidCheckInController;
+use App\Http\Controllers\AvailabilityController;
+use App\Http\Controllers\CheckoutPageController;
+use App\Http\Controllers\ConfirmationController;
 use App\Http\Controllers\HousekeepingController;
+use App\Http\Controllers\RfidCheckOutController;
+use App\Http\Controllers\RfidFrontDeskController;
+use App\Http\Controllers\AmenityRequestController;
 use App\Http\Controllers\HousekeepingTaskController;
 use App\Http\Controllers\PublicReservationController;
-use App\Http\Controllers\ConfirmationController;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\RfidCardController;
-use App\Http\Controllers\RfidCheckInController;
-use App\Http\Controllers\RfidCheckOutController;
 
 // Route::view('/', 'public.index');
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -74,21 +78,76 @@ Route::middleware(['auth', 'role:admin,housekeeping'])->group(function () {
 
 
     // CHECK IN
-Route::get('/check-in/{booking}', [CheckInController::class, 'show'])->name('check-in.show');
-Route::post('/booking/{booking}/payment', [CheckInController::class, 'store'])->name('booking.payment.store');
-// CHECK OUT
-Route::get('/check-out/{booking}', [CheckOutController::class, 'show'])->name('hms.check-out.show');
-Route::post('/hms/check-out/{booking}', [CheckOutController::class, 'store'])->name('hms.check-out.store');
-// INVOICES
-Route::get('/invoices', [InvoiceController::class, 'index'])->name('invoices.index');
-Route::get('/invoices/{booking}', [InvoiceController::class, 'show'])->name('invoices.show');
-// REPORT
-Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+    Route::get('/check-in/{booking}', [CheckInController::class, 'show'])->name('check-in.show');
+    Route::post('/booking/{booking}/payment', [CheckInController::class, 'store'])->name('booking.payment.store');
+    // CHECK OUT
+    Route::get('/check-out/{booking}', [CheckOutController::class, 'show'])->name('hms.check-out.show');
+    Route::post('/hms/check-out/{booking}', [CheckOutController::class, 'store'])->name('hms.check-out.store');
+    // INVOICES
+    Route::get('/invoices', [InvoiceController::class, 'index'])->name('invoices.index');
+    Route::get('/invoices/{booking}', [InvoiceController::class, 'show'])->name('invoices.show');
+    // REPORT
+    Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
 
-// HOUSEKEEPING
-Route::get('/housekeeping', [HousekeepingTaskController::class, 'index'])->name('housekeeping.index');
-Route::post('/housekeeping/tasks', [HousekeepingTaskController::class, 'store'])->name('housekeeping.tasks.store');
-Route::patch('/housekeeping/tasks/{task}', [HousekeepingTaskController::class, 'update'])->name('housekeeping.tasks.update');
+    // HOUSEKEEPING
+    Route::get('/housekeeping', [HousekeepingTaskController::class, 'index'])->name('housekeeping.index');
+    Route::post('/housekeeping/tasks', [HousekeepingTaskController::class, 'store'])->name('housekeeping.tasks.store');
+    Route::patch('/housekeeping/tasks/{task}', [HousekeepingTaskController::class, 'update'])->name('housekeeping.tasks.update');
+
+    // FOLIO CHARGES
+    Route::get('/bookings/{booking}/folio', [FolioChargeController::class, 'index'])->name('bookings.folio');
+    Route::post('/bookings/{booking}/folio/charges', [FolioChargeController::class, 'store'])->name('bookings.folio.charges.store');
+    Route::patch('/folio-charges/{charge}/void', [FolioChargeController::class, 'void'])->name('folio-charges.void');
+
+    // AMENITY REQUESTS
+    Route::get('/amenity-requests', [AmenityRequestController::class, 'index'])
+        ->name('amenity-requests.index');
+
+    Route::post('/amenity-requests', [AmenityRequestController::class, 'store'])
+        ->name('amenity-requests.store');
+
+    Route::patch('/amenity-requests/{amenityRequest}/approve', [AmenityRequestController::class, 'approve'])
+        ->name('amenity-requests.approve');
+
+    Route::patch('/amenity-requests/{amenityRequest}/reject', [AmenityRequestController::class, 'reject'])
+        ->name('amenity-requests.reject');
+
+    Route::patch('/amenity-requests/{amenityRequest}/fulfill', [AmenityRequestController::class, 'fulfill'])
+        ->name('amenity-requests.fulfill');
+
+    // AMENITY ITEMS
+    Route::get('/amenity-items', [AmenityItemController::class, 'index'])
+        ->name('amenity-items.index');
+
+    Route::post('/amenity-items', [AmenityItemController::class, 'store'])
+        ->name('amenity-items.store');
+
+    Route::patch('/amenity-items/{amenityItem}', [AmenityItemController::class, 'update'])
+        ->name('amenity-items.update');
+
+    Route::delete('/amenity-items/{amenityItem}', [AmenityItemController::class, 'destroy'])
+        ->name('amenity-items.destroy');
+
+
+
+
+
+    // RFID
+    Route::resource('rfid-cards', RfidCardController::class);
+
+    Route::get('/rfid-check-in', [RfidCheckInController::class, 'index'])->name('rfid.check-in.index');
+    Route::post('/rfid-check-in/{booking}', [RfidCheckInController::class, 'store'])->name('rfid.check-in.store');
+
+    Route::get('/rfid-check-out', [RfidCheckOutController::class, 'index'])->name('rfid.check-out.index');
+    Route::get('/rfid-check-out/search', [RfidCheckOutController::class, 'search'])->name('rfid.check-out.search');
+    Route::post('/rfid-check-out/{booking}', [RfidCheckOutController::class, 'checkout'])->name('rfid.check-out.checkout');
+
+    // RFID FRONT DESK
+    Route::get('/rfid-front-desk', [RfidFrontDeskController::class, 'index'])->name('rfid.front-desk.index');
+    Route::post('/rfid-front-desk/search', [RfidFrontDeskController::class, 'search'])->name('rfid.front-desk.search');
+    Route::post('/rfid-front-desk/check-in/{booking}', [RfidFrontDeskController::class, 'checkIn'])->name('rfid.front-desk.check-in');
+    Route::post('/rfid-front-desk/check-out/{booking}', [RfidFrontDeskController::class, 'checkOut'])->name('rfid.front-desk.check-out');
+    Route::post('/rfid-front-desk/detect', [RfidFrontDeskController::class, 'detect'])->name('rfid.front-desk.detect');
     
 });
 
@@ -120,15 +179,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::patch('/admin/users/{user}/toggle-status', [AdminUserController::class, 'toggleStatus'])->name('admin.users.toggle-status');
 
 
-    // RFID
-    Route::resource('rfid-cards', RfidCardController::class);
-
-    Route::get('/rfid-check-in', [RfidCheckInController::class, 'index'])->name('rfid.check-in.index');
-    Route::post('/rfid-check-in/{booking}', [RfidCheckInController::class, 'store'])->name('rfid.check-in.store');
-
-    Route::get('/rfid-check-out', [RfidCheckOutController::class, 'index'])->name('rfid.check-out.index');
-    Route::get('/rfid-check-out/search', [RfidCheckOutController::class, 'search'])->name('rfid.check-out.search');
-    Route::post('/rfid-check-out/{booking}', [RfidCheckOutController::class, 'checkout'])->name('rfid.check-out.checkout');
+    
     
 });
 

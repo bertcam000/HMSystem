@@ -3,6 +3,8 @@
 namespace App\Models;
 use App\Models\RfidCard;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Models\FolioCharge;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -86,6 +88,39 @@ class Booking extends Model
     }
     
     
+    public function folioCharges(): HasMany
+    {
+        return $this->hasMany(FolioCharge::class);
+    }
+
+    public function activeFolioCharges(): HasMany
+    {
+        return $this->hasMany(FolioCharge::class)->where('is_void', false);
+    }
+
+    public function getFolioChargesTotalAttribute(): float
+    {
+        return round($this->activeFolioCharges()->sum('amount'), 2);
+    }
+
+    public function getPaidTotalAttribute(): float
+    {
+        return round($this->payments()->sum('amount'), 2);
+    }
+
+    public function getGrandTotalAttribute(): float
+    {
+        return round($this->total_price + $this->folio_charges_total, 2);
+    }
+
+    public function getRemainingBalanceAttribute(): float
+    {
+        return round(max($this->grand_total - $this->paid_total, 0), 2);
+    }
     
+    public function amenityRequests(): HasMany
+    {
+        return $this->hasMany(AmenityRequest::class);
+    }
     
 }

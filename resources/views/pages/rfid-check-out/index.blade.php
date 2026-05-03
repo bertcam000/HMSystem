@@ -166,23 +166,30 @@
                         </div>
                     </div>
 
-                    @if ($balance > 0)
-                        <div class="mt-6 rounded-2xl border border-amber-200 bg-amber-50 px-5 py-4 text-sm font-medium text-amber-700">
-                            Guest still has a remaining balance. Settle payment first before checkout.
-                        </div>
-                    @else
-                        <form
-                            method="POST"
-                            action="{{ route('rfid.check-out.checkout', $booking) }}"
-                            class="mt-6"
-                            onsubmit="return confirm('Confirm check-out for this guest?')">
-                            @csrf
+                    <div class="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
+                        <a href="{{ route('bookings.folio', $booking) }}"
+                        class="inline-flex items-center justify-center rounded-xl bg-orange-600 px-4 py-2 text-sm font-semibold text-white hover:bg-orange-700">
+                            Open Folio / Add Charges
+                        </a>
 
-                            <button class="w-full rounded-2xl bg-slate-900 px-5 py-3 text-sm font-bold text-white hover:bg-slate-700 sm:w-auto">
-                                Confirm Check-out
-                            </button>
-                        </form>
-                    @endif
+                        @if ($balance > 0)
+                            <div class="rounded-2xl border border-amber-200 bg-amber-50 px-5 py-4 text-sm font-medium text-amber-700">
+                                Guest still has a remaining balance. Settle payment first before checkout.
+                            </div>
+                        @else
+                            <form
+                                method="POST"
+                                action="{{ route('rfid.check-out.checkout', $booking) }}"
+                                onsubmit="return confirm('Confirm check-out for this guest?')">
+                                @csrf
+
+                                <button class="w-full rounded-2xl bg-slate-900 px-5 py-3 text-sm font-bold text-white hover:bg-slate-700 sm:w-auto">
+                                    Confirm Check-out
+                                </button>
+                            </form>
+                        @endif
+                    </div>
+                    
                 </div>
             @endif
         </div>

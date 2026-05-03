@@ -1,5 +1,8 @@
 <?php
 
+use App\Models\Booking;
+use App\Models\User;
+use App\Models\FolioCharge;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -11,56 +14,31 @@ return new class extends Migration
         Schema::create('amenity_requests', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('booking_id')
-                ->constrained('bookings')
-                ->cascadeOnDelete();
-
-            $table->foreignId('guest_id')
-                ->nullable()
-                ->constrained('guests')
-                ->nullOnDelete();
+            $table->foreignIdFor(Booking::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(FolioCharge::class)->nullable()->constrained()->nullOnDelete();
 
             $table->string('item_name');
-            $table->string('category')->default('amenity');
+            $table->string('category')->default('amenity'); 
             // amenity, consumable, service, other
 
-            $table->unsignedInteger('quantity')->default(1);
+            $table->decimal('quantity', 10, 2)->default(1);
+            $table->decimal('unit_price', 12, 2)->default(0);
+            $table->decimal('total_amount', 12, 2)->default(0);
 
-            $table->boolean('is_chargeable')->default(false);
-            $table->decimal('price', 10, 2)->default(0);
-            $table->decimal('total_cost', 10, 2)->default(0);
-
-            $table->text('notes')->nullable();
+            $table->boolean('is_chargeable')->default(true);
 
             $table->string('status')->default('pending');
-            // pending, approved, rejected, delivered, completed, cancelled
+            // pending, approved, fulfilled, rejected, cancelled
 
-            $table->foreignId('requested_by')
-                ->nullable()
-                ->constrained('users')
-                ->nullOnDelete();
-
-            $table->foreignId('approved_by')
-                ->nullable()
-                ->constrained('users')
-                ->nullOnDelete();
-
-            $table->timestamp('approved_at')->nullable();
-
-            $table->foreignId('rejected_by')
-                ->nullable()
-                ->constrained('users')
-                ->nullOnDelete();
-
-            $table->timestamp('rejected_at')->nullable();
+            $table->text('notes')->nullable();
             $table->text('rejection_reason')->nullable();
 
-            $table->foreignId('delivered_by')
-                ->nullable()
-                ->constrained('users')
-                ->nullOnDelete();
+            $table->foreignId('requested_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('approved_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('fulfilled_by')->nullable()->constrained('users')->nullOnDelete();
 
-            $table->timestamp('delivered_at')->nullable();
+            $table->timestamp('approved_at')->nullable();
+            $table->timestamp('fulfilled_at')->nullable();
 
             $table->timestamps();
         });

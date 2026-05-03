@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Booking;
 use App\Models\RfidCard;
+use App\Models\Room;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -34,7 +35,7 @@ class RfidCheckOutController extends Controller
         }
 
         $booking = Booking::query()
-            ->with(['guest', 'rooms', 'rfidCard'])
+            ->with(['guest', 'rooms', 'rfidCard', 'payments'])
             ->where('rfid_card_id', $rfidCard->id)
             ->where('status', 'checked_in')
             ->latest()
@@ -56,7 +57,7 @@ class RfidCheckOutController extends Controller
 
     public function checkout(Request $request, Booking $booking)
     {
-        if ($booking->status !== 'checked_in') {
+        if (strtolower($booking->status) !== 'checked_in') {
             return redirect()
                 ->route('rfid.check-out.index')
                 ->withErrors([
@@ -64,9 +65,19 @@ class RfidCheckOutController extends Controller
                 ]);
         }
 
-        $booking->load(['rooms', 'rfidCard']);
+        $booking->load(['rooms', 'rfidCard', 'payments']);
 
-        $balance = round((float) ($booking->total_price ?? 0) - (float) ($booking->paid_amount ?? 0), 2);
+        // Folio-aware balance:
+        // Room total + active folio charges - payments
+        $chargesTotal = round((float) $booking->activeFolioCharges()->sum('amount'), 2);
+        $paidAmount = round((float) $booking->payments()->sum('amount'), 2);
+
+        $grandTotal = round((float) $booking->total_price + $chargesTotal, 2);
+        $balance = round($grandTotal - $paidAmount, 2);
+
+        if ($balance < 0.01) {
+            $balance = 0.00;
+        }
 
         if ($balance > 0) {
             return back()->withErrors([
@@ -75,25 +86,58 @@ class RfidCheckOutController extends Controller
         }
 
         DB::transaction(function () use ($booking) {
+            $booking = Booking::lockForUpdate()->findOrFail($booking->id);
+            $booking->load(['rooms', 'rfidCard', 'payments']);
+
+            if (strtolower($booking->status) !== 'checked_in') {
+                abort(422, 'This booking is no longer eligible for RFID check-out.');
+            }
+
+            // Recheck inside transaction para safe
+            $chargesTotal = round((float) $booking->activeFolioCharges()->sum('amount'), 2);
+            $paidAmount = round((float) $booking->payments()->sum('amount'), 2);
+
+            $grandTotal = round((float) $booking->total_price + $chargesTotal, 2);
+            $balance = round($grandTotal - $paidAmount, 2);
+
+            if ($balance < 0.01) {
+                $balance = 0.00;
+            }
+
+            if ($balance > 0) {
+                abort(422, 'Guest still has remaining balance of ₱' . number_format($balance, 2) . '.');
+            }
+
             $rfidCard = $booking->rfidCard;
 
+            if ($rfidCard) {
+                $lockedCard = RfidCard::lockForUpdate()->find($rfidCard->id);
+
+                if ($lockedCard) {
+                    $lockedCard->update([
+                        'status' => 'available',
+                    ]);
+                }
+            }
+
+            foreach ($booking->rooms as $room) {
+                $lockedRoom = Room::lockForUpdate()->find($room->id);
+
+                if ($lockedRoom) {
+                    $lockedRoom->update([
+                        'status' => 'Dirty',
+                    ]);
+                }
+            }
+
             $booking->update([
+                'paid_amount' => $paidAmount,
+                'balance' => $balance,
+                'payment_status' => 'paid',
                 'status' => 'checked_out',
                 'checked_out_at' => now(),
                 'rfid_card_id' => null,
             ]);
-
-            if ($rfidCard) {
-                $rfidCard->update([
-                    'status' => 'available',
-                ]);
-            }
-
-            foreach ($booking->rooms as $room) {
-                $room->update([
-                    'status' => 'Dirty',
-                ]);
-            }
         });
 
         return redirect()

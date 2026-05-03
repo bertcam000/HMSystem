@@ -40,19 +40,50 @@ class CheckOutController extends Controller
             return redirect()->back()->with('error', 'This booking is not eligible for check-out.');
         }
 
-        if ((float) $booking->balance > 0) {
-            return redirect()->back()->with('error', 'Guest still has an unpaid balance. Please settle payment before check-out.');
+        // Room total + active folio charges - payments
+        $chargesTotal = round((float) $booking->activeFolioCharges()->sum('amount'), 2);
+        $paidAmount = round((float) $booking->payments()->sum('amount'), 2);
+
+        $grandTotal = round((float) $booking->total_price + $chargesTotal, 2);
+        $balance = round($grandTotal - $paidAmount, 2);
+
+        if ($balance < 0.01) {
+            $balance = 0.00;
+        }
+
+        if ($balance > 0) {
+            return redirect()->back()->with(
+                'error',
+                'Guest still has an unpaid balance of ₱' . number_format($balance, 2) . '. Please settle payment before check-out.'
+            );
         }
 
         DB::transaction(function () use ($booking) {
             $booking = Booking::lockForUpdate()->findOrFail($booking->id);
-            $booking->load('rooms');
+            $booking->load(['rooms', 'payments']);
 
             if (strtolower($booking->status) !== 'checked_in') {
                 abort(422, 'This booking is no longer eligible for check-out.');
             }
 
+            // Recheck inside transaction para safe
+            $chargesTotal = round((float) $booking->activeFolioCharges()->sum('amount'), 2);
+            $paidAmount = round((float) $booking->payments()->sum('amount'), 2);
+
+            $grandTotal = round((float) $booking->total_price + $chargesTotal, 2);
+            $balance = round($grandTotal - $paidAmount, 2);
+
+            if ($balance < 0.01) {
+                $balance = 0.00;
+            }
+
+            if ($balance > 0) {
+                abort(422, 'Guest still has an unpaid balance of ₱' . number_format($balance, 2) . '.');
+            }
+
             $booking->update([
+                'balance' => $balance,
+                'payment_status' => 'paid',
                 'status' => 'checked_out',
                 'checked_out_at' => now(),
             ]);

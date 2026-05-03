@@ -177,6 +177,22 @@
                     </div>
                 </div>
             </a>
+            <a wire:navigate  href="/amenity-requests" class=" px-3 py-3    {{ request()->is('amenity-requests') ? 'bg-[#f8fcfc] text-black rounded-l-full' : '' }} rounded-l-full hover:bg-[#f8fcfc] hover:text-black" x-data="{dropdown1:false}">
+                <div  class="flex justify-between items-center ">
+                    <div class=" flex items-center gap-4 px-2">
+                        <x-icon name="user-group" />
+                        Amenity Requests
+                    </div>
+                </div>
+            </a>
+            <a wire:navigate  href="/amenity-items" class=" px-3 py-3    {{ request()->is('amenity-items') ? 'bg-[#f8fcfc] text-black rounded-l-full' : '' }} rounded-l-full hover:bg-[#f8fcfc] hover:text-black" x-data="{dropdown1:false}">
+                <div  class="flex justify-between items-center ">
+                    <div class=" flex items-center gap-4 px-2">
+                        <x-icon name="user-group" />
+                        Amenity Items
+                    </div>
+                </div>
+            </a>
             <a wire:navigate  href="/rfid-cards" class=" px-3 py-3    {{ request()->is('rfid-cards') ? 'bg-[#f8fcfc] text-black rounded-l-full' : '' }} rounded-l-full hover:bg-[#f8fcfc] hover:text-black" x-data="{dropdown1:false}">
                 <div  class="flex justify-between items-center ">
                     <div class=" flex items-center gap-4 px-2">

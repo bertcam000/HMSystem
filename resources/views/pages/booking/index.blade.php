@@ -216,6 +216,10 @@
                                 <a href="/booking/result/{{ $booking->id }}">
                                     <x-icon name="eye" class="text-green-700"/>
                                 </a>
+                                <a href="{{ route('bookings.folio', $booking) }}"
+                                    class="rounded-lg bg-slate-900 px-3 py-2 text-xs font-semibold text-white hover:bg-slate-800">
+                                    Folio
+                                </a>
                           </div>
                         </td>
                         {{-- <td class="px-6 py-4 relative no-print">
