@@ -19,33 +19,37 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-            'role' => 'admin',
+        $this->call([
+            EventVenueSeeder::class,
         ]);
+        
+        // User::factory()->create([
+        //     'name' => 'Test User',
+        //     'email' => 'test@example.com',
+        //     'role' => 'admin',
+        // ]);
 
-        User::factory()->create([
-            'name' => 'Test User2',
-            'email' => 'test2@example.com',
-            'role' => 'staff',
-        ]);
+        // User::factory()->create([
+        //     'name' => 'Test User2',
+        //     'email' => 'test2@example.com',
+        //     'role' => 'staff',
+        // ]);
 
-        Feature::insert([
-            ['name' => 'Private balcony'],
-            ['name' => 'Work desk'],
-            ['name' => 'Seating area'],
-            ['name' => 'Large windows']
-        ]);
+        // Feature::insert([
+        //     ['name' => 'Private balcony'],
+        //     ['name' => 'Work desk'],
+        //     ['name' => 'Seating area'],
+        //     ['name' => 'Large windows']
+        // ]);
 
-        Facility::insert([
-            ['name' => 'High speed WiFi'],
-            ['name' => 'Flat screen TV'],
-            ['name' => 'Mini fridge'],
-            ['name' => 'Air conditioning'],
-            ['name' => 'Coffee maker'],
-            ['name' => 'Room service']
-        ]);
+        // Facility::insert([
+        //     ['name' => 'High speed WiFi'],
+        //     ['name' => 'Flat screen TV'],
+        //     ['name' => 'Mini fridge'],
+        //     ['name' => 'Air conditioning'],
+        //     ['name' => 'Coffee maker'],
+        //     ['name' => 'Room service']
+        // ]);
         
     }
 }
