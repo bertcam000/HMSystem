@@ -43,7 +43,7 @@ new class extends Component {
             <div class="bg-slate-50 p-6 border-r border-slate-200">
                 <div class="grid grid-cols-2 gap-4">
                     @foreach ($roomType->images as $image)
-                        <img @click="open=true; image='{{ asset('storage/'.$image->image_path) }}'"
+                        <img image='{{ asset('storage/'.$image->image_path) }}'"
                         src="{{ asset('storage/'.$image->image_path) }}"
                         class="h-56 w-full rounded-2xl object-cover shadow-sm">
                     @endforeach
@@ -115,7 +115,7 @@ new class extends Component {
                 </div>
 
                 <!-- Footer Buttons -->
-                <div class="mt-8 flex flex-col sm:flex-row gap-3">
+                {{-- <div class="mt-8 flex flex-col sm:flex-row gap-3">
                     <button class="w-full sm:w-auto rounded-2xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-700 transition">
                         Edit Room Type
                     </button>
@@ -123,7 +123,7 @@ new class extends Component {
                     <button class="w-full sm:w-auto rounded-2xl border border-slate-300 px-5 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-100 transition">
                         Close
                     </button>
-                </div>
+                </div> --}}
             </div>
         </div>
     </div>

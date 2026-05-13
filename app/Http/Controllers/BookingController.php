@@ -36,10 +36,24 @@ class BookingController extends Controller
 
         $bookings = $query->latest()->paginate(10)->withQueryString();
 
-        // For dropdown + counts
+        
+        $totalBookings = Booking::count();
+
+        $pendingBookings = Booking::where('status', 'pending')->count();
+
+        $checkedInGuests = Booking::where('status', 'checked_in')->count();
+
+        $checkedOutToday = Booking::where('status', 'checked_out')
+            ->whereDate('checked_out_at', today())
+            ->count();
+        
         return view(
             'pages.booking.index',
-            compact('bookings')
+            compact('bookings','bookings',
+                'totalBookings',
+                'pendingBookings',
+                'checkedInGuests',
+                'checkedOutToday')
         );
     }
 

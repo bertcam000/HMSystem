@@ -327,12 +327,12 @@
             </div>
         </div>
 
-        <div class="mt-6 flex justify-end print:hidden">
+        {{-- <div class="mt-6 flex justify-end print:hidden">
             <button onclick="window.print()"
                 class="inline-flex items-center justify-center rounded-2xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-700">
                 Print Report
             </button>
-        </div>
+        </div> --}}
     </div>
 </div>
 

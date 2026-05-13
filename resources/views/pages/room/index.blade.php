@@ -132,7 +132,7 @@
                                         </p>
                                     </div>
 
-                                    <div class="flex items-center gap-3 text-sm">
+                                    {{-- <div class="flex items-center gap-3 text-sm">
                                         <a href="#" class="font-medium text-emerald-600 transition hover:text-emerald-700">
                                             Edit
                                         </a>
@@ -144,7 +144,7 @@
                                         >
                                             Delete
                                         </button>
-                                    </div>
+                                    </div> --}}
                                 </div>
 
                                 <div class="mt-4 flex flex-wrap items-center gap-2">

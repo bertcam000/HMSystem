@@ -188,16 +188,8 @@
                                                 <p class="text-xs text-gray-400">per night</p>
                                             </div>
 
-                                            <a href="{{ url('/checkout') . '?' . http_build_query([
-                                                'step' => 2,
-                                                'room_type' => $type->id,
-                                                'checkin' => request('checkin'),
-                                                'checkout' => request('checkout'),
-                                                'adults' => request('adults', 2),
-                                                'children' => request('children', 0),
-                                                'rooms' => request('rooms', 1),
-                                            ]) }}"
-                                            class="inline-flex w-full items-center justify-center rounded-xl bg-gold px-5 py-3 text-sm font-bold text-black hover:bg-[#e1b454] transition">
+                                            <a href="/availability?room_type={{ $type->id }}"
+                                                class="inline-flex w-full items-center justify-center rounded-xl bg-gold px-5 py-3 text-sm font-bold text-black hover:bg-[#e1b454] transition">
                                                 Book This Room Type
                                             </a>
                                         </div>
@@ -241,6 +233,11 @@
         function availabilityPage() {
             return {
                 roomType: @json($roomType),
+
+                bookRoomTypeHref(roomType) {
+                    return `/availability?room_type=${roomType.id}`;
+                },
+                
                 state: {
                     stay: {
                         checkin: '',

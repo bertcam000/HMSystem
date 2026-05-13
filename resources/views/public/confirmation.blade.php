@@ -170,7 +170,7 @@
             </a>
 
             <nav class="hidden md:flex items-center gap-8 text-sm font-semibold">
-                <a href="{{ url('/rooms') }}" class="hover:text-gold transition">Rooms</a>
+                {{-- <a href="{{ url('/rooms') }}" class="hover:text-gold transition">Rooms</a> --}}
                 <a href="{{ url('/offers') }}" class="hover:text-gold transition">Offers</a>
                 <a href="{{ url('/availability') }}" class="hover:text-gold transition">Book Again</a>
             </nav>

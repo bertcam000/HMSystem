@@ -39,7 +39,7 @@ Route::view('profile', 'profile')
     ->middleware(['auth'])
     ->name('profile');
 
-Route::middleware(['auth', 'role:admin,housekeeping'])->group(function () {
+Route::middleware(['auth', 'role:admin,housekeeping,staff'])->group(function () {
     Route::get('/rooms', [RoomController::class, 'index'])->name('rooms.index');
     Route::view('/events', 'pages.event.index')->name('events.index');
 

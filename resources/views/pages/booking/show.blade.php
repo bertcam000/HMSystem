@@ -25,11 +25,11 @@
                         View Folio / Charges
                     </a>
                     
-                    <button class="inline-flex items-center justify-center rounded-2xl border border-slate-200 px-5 py-3 text-sm font-semibold text-slate-700 bg-primary text-white">Confirm Booking</button>
-                    <a href="/bookings"
+                    {{-- <button class="inline-flex items-center justify-center rounded-2xl border border-slate-200 px-5 py-3 text-sm font-semibold text-slate-700 bg-primary text-white">Confirm Booking</button> --}}
+                    {{-- <a href="/bookings"
                     class="inline-flex items-center justify-center rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-100">
                         Back
-                    </a>
+                    </a> --}}
 
                     @if ($canAddPayment)
                         <button

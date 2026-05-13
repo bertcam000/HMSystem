@@ -77,7 +77,7 @@ new class extends Component {
 
             $bookingStatus = $this->booking->status;
 
-            if ($this->booking->status === 'reserved' && $balance <= 0) {
+            if (in_array(strtolower($this->booking->status), ['pending', 'reserved']) && $balance <= 0) {
                 $bookingStatus = 'confirmed';
             }
 

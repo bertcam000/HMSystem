@@ -33,10 +33,10 @@
                     ← Back to History
                 </a>
 
-                <button onclick="window.print()"
+                {{-- <button onclick="window.print()"
                     class="inline-flex items-center justify-center rounded-2xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-700">
                     Print Snapshot
-                </button>
+                </button> --}}
             </div>
         </div>
 

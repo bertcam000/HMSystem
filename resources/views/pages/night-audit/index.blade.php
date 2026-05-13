@@ -85,10 +85,10 @@
                         History
                     </a>
 
-                    <button onclick="window.print()"
+                    {{-- <button onclick="window.print()"
                         class="inline-flex items-center justify-center rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50">
                         Print Report
-                    </button>
+                    </button> --}}
 
                     <form action="{{ route('night-audit.run') }}" method="POST" class="inline">
                         @csrf

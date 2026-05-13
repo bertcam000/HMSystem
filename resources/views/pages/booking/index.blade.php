@@ -21,8 +21,10 @@
             <div class="shadow-md flex justify-between gap-5 bg-white p-4 border border-gray-300/60 rounded-xl">
                 <div>
                     <div class="text-gray-500 text-sm">Total Bookings</div>
-                    <p class="text-2xl font-bold">1,524</p>
-                    <p class="text-gray-400 text-xs text-green-500">+12% from last month</p>
+                    <p class="text-2xl font-bold">{{ number_format($totalBookings) }}</p>
+                    <p class="text-xs text-slate-400">
+                        Total reservations in system
+                    </p>
                 </div>
                 <div class="bg-blue-500 p-2 rounded-md h-10 w-10 flex items-center justify-center">
                     <x-icon name="calendar" class="w-5 h-5 text-white" outline />
@@ -31,8 +33,10 @@
             <div class="shadow-md flex justify-between gap-5 bg-white p-4 border border-gray-300/60 rounded-xl">
                 <div>
                     <div class="text-gray-500 text-sm">Pending Bookings</div>
-                    <p class="text-2xl font-bold">1,524</p>
-                    <p class="text-gray-400 text-xs text-orange-500">Need confirmation</p>
+                    <p class="text-2xl font-bold">{{ number_format($pendingBookings) }}</p>
+                    <p class="text-xs text-amber-500">
+                        Awaiting confirmation
+                    </p>
                 </div>
                 <div class="bg-amber-500 p-2 rounded-md h-10 w-10 flex items-center justify-center">
                     <x-icon name="clock" class="w-5 h-5 text-white" outline />
@@ -41,8 +45,10 @@
             <div class="shadow-md flex justify-between gap-5 bg-white p-4 border border-gray-300/60 rounded-xl">
                 <div>
                     <div class="text-gray-500 text-sm">Checked-In Guest</div>
-                    <p class="text-2xl font-bold">23</p>
-                    <p class="text-gray-400 text-xs text-green-500">Active stays today</p>
+                    <p class="text-2xl font-bold">{{ number_format($checkedInGuests) }}</p>
+                    <p class="text-xs text-emerald-500">
+                        Active stays today
+                    </p>
                 </div>
                 <div class="bg-green-500 p-2 rounded-md h-10 w-10 flex items-center justify-center">
                     <x-icon name="calendar" class="w-5 h-5 text-white" outline />
@@ -51,8 +57,10 @@
             <div class="shadow-md flex justify-between gap-5 bg-white p-4 border border-gray-300/60 rounded-xl">
                 <div>
                     <div class="text-gray-500 text-sm">Checked-Out Today</div>
-                    <p class="text-2xl font-bold">15</p>
-                    <p class="text-gray-400 text-xs text-red-400">Completed stays</p>
+                    <p class="text-2xl font-bold">{{ number_format($checkedOutToday) }}</p>
+                    <p class="text-xs text-rose-500">
+                        Completed departures today
+                    </p>
                 </div>
                 <div class="bg-red-400 p-2 rounded-md h-10 w-10 flex items-center justify-center">
                     <x-icon name="check" class="w-5 h-5 text-white" outline />

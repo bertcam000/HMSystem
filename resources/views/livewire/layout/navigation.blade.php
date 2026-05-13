@@ -30,8 +30,8 @@ new class extends Component
     </div>
 </div> --}}
 
-<div class="absolute bottom-0">
-    <div class=" px-3 py-3    {{ request()->is('task-management') ? 'bg-[#f8fcfc] text-black rounded-l-full' : '' }} rounded-l-full hover:bg-[#f8fcfc] hover:text-black" x-data="{dropdown1:false}">
+<div class="">
+    <div class=" px-3 py-3 {{ request()->is('task-management') ? 'bg-[#f8fcfc] text-black rounded-l-full' : '' }} rounded-l-full hover:bg-[#f8fcfc] hover:text-black" x-data="{dropdown1:false}">
         <div class="flex gap-7 items-center ">
             <x-icon name="arrow-left-start-on-rectangle"/>
             <button wire:click="logout" class="w-full text-start">

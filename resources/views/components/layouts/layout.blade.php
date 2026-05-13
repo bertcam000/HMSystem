@@ -201,22 +201,33 @@
                     </div>
                 </div>
             </a>
-            <a wire:navigate  href="/rfid-check-in" class=" px-3 py-3    {{ request()->is('rfid-check-in') ? 'bg-[#f8fcfc] text-black rounded-l-full' : '' }} rounded-l-full hover:bg-[#f8fcfc] hover:text-black" x-data="{dropdown1:false}">
+            <a wire:navigate  href="/rfid-front-desk" class=" px-3 py-3    {{ request()->is('rfid-check-in') ? 'bg-[#f8fcfc] text-black rounded-l-full' : '' }} rounded-l-full hover:bg-[#f8fcfc] hover:text-black" x-data="{dropdown1:false}">
                 <div  class="flex justify-between items-center ">
                     <div class=" flex items-center gap-4 px-2">
                         <x-icon name="user-group" />
-                        RFID Check in
+                        RFID In / Out
                     </div>
                 </div>
             </a>
-            <a wire:navigate  href="/rfid-check-out" class=" px-3 py-3    {{ request()->is('rfid-check-out') ? 'bg-[#f8fcfc] text-black rounded-l-full' : '' }} rounded-l-full hover:bg-[#f8fcfc] hover:text-black" x-data="{dropdown1:false}">
+            {{-- <a wire:navigate  href="/rfid-check-out" class=" px-3 py-3    {{ request()->is('rfid-check-out') ? 'bg-[#f8fcfc] text-black rounded-l-full' : '' }} rounded-l-full hover:bg-[#f8fcfc] hover:text-black" x-data="{dropdown1:false}">
                 <div  class="flex justify-between items-center ">
                     <div class=" flex items-center gap-4 px-2">
                         <x-icon name="user-group" />
                         RFID Check out
                     </div>
                 </div>
-            </a>
+            </a> --}}
+            
+
+            <div class=" px-3 py-3    {{ request()->is('task-management') ? 'bg-[#f8fcfc] text-black rounded-l-full' : '' }} rounded-l-full hover:bg-[#f8fcfc] hover:text-black" x-data="{dropdown1:false}">
+                <div class="flex justify-between items-center ">
+                    <a wire:navigate href="/housekeeping" @click="dropdown1=true" @click.away="dropdown1=false" class=" flex items-center gap-4 px-2">
+                        <x-icon name="currency-dollar" />
+                        Housekeeping
+                    </a>
+                </div>
+            </div>
+
             <a wire:navigate href="/events" class=" px-3 py-3    {{ request()->is('events') ? 'bg-[#f8fcfc] text-black rounded-l-full' : '' }} rounded-l-full hover:bg-[#f8fcfc] hover:text-black" x-data="{dropdown1:false}">
                 <div  class="flex justify-between items-center ">
                     <div class=" flex items-center gap-4 px-2">
@@ -226,16 +237,9 @@
                 </div>
             </a>
             @can('view-page')
-            <div class=" px-3 py-3    {{ request()->is('task-management') ? 'bg-[#f8fcfc] text-black rounded-l-full' : '' }} rounded-l-full hover:bg-[#f8fcfc] hover:text-black" x-data="{dropdown1:false}">
-                <div class="flex justify-between items-center ">
-                    <a wire:navigate href="/housekeeping" @click="dropdown1=true" @click.away="dropdown1=false" class=" flex items-center gap-4 px-2">
-                        <x-icon name="currency-dollar" />
-                        Housekeeping
-                    </a>
-                </div>
-            </div>
+            
            
-            <div class=" px-3 py-3    {{ request()->is('task-management') ? 'bg-[#f8fcfc] text-black rounded-l-full' : '' }} rounded-l-full hover:bg-[#f8fcfc] hover:text-black" x-data="{dropdown1:false}">
+            <div class=" px-3 py-3    {{ request()->is('invoices') ? 'bg-[#f8fcfc] text-black rounded-l-full' : '' }} rounded-l-full hover:bg-[#f8fcfc] hover:text-black" x-data="{dropdown1:false}">
                 <div class="flex justify-between items-center ">
                     <a wire:navigate href="/invoices" @click="dropdown1=true" @click.away="dropdown1=false" class=" flex items-center gap-4 px-2">
                         <x-icon name="briefcase" />
@@ -243,7 +247,7 @@
                     </a>
                 </div>
             </div>
-            <div class=" px-3 py-3    {{ request()->is('task-management') ? 'bg-[#f8fcfc] text-black rounded-l-full' : '' }} rounded-l-full hover:bg-[#f8fcfc] hover:text-black" x-data="{dropdown1:false}">
+            <div class=" px-3 py-3    {{ request()->is('night-audit') ? 'bg-[#f8fcfc] text-black rounded-l-full' : '' }} rounded-l-full hover:bg-[#f8fcfc] hover:text-black" x-data="{dropdown1:false}">
                 <div class="flex justify-between items-center ">
                     <a wire:navigate href="/night-audit" @click="dropdown1=true" @click.away="dropdown1=false" class=" flex items-center gap-4 px-2">
                         <x-icon name="moon"/>
@@ -251,7 +255,16 @@
                     </a>
                 </div>
             </div>
+            <div class=" px-3 py-3    {{ request()->is('admin/users') ? 'bg-[#f8fcfc] text-black rounded-l-full' : '' }} rounded-l-full hover:bg-[#f8fcfc] hover:text-black" x-data="{dropdown1:false}">
+                <div class="flex justify-between items-center ">
+                    <a wire:navigate href="/admin/users" @click="dropdown1=true" @click.away="dropdown1=false" class=" flex items-center gap-4 px-2">
+                        <x-icon name="moon"/>
+                        Accounts
+                    </a>
+                </div>
+            </div>
             @endcan
+            
 
             <livewire:layout.navigation />
 

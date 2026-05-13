@@ -81,9 +81,9 @@
                         >
                             <option value="">All Roles</option>
                             <option value="admin" @selected(request('role') === 'admin')>Admin</option>
-                            <option value="frontdesk" @selected(request('role') === 'frontdesk')>Front Desk</option>
+                            {{-- <option value="frontdesk" @selected(request('role') === 'frontdesk')>Front Desk</option>
                             <option value="housekeeping" @selected(request('role') === 'housekeeping')>Housekeeping</option>
-                            <option value="hr" @selected(request('role') === 'hr')>HR</option>
+                            <option value="hr" @selected(request('role') === 'hr')>HR</option> --}}
                             <option value="staff" @selected(request('role') === 'staff')>Staff</option>
                         </select>
                     </div>

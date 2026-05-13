@@ -96,6 +96,7 @@ class RfidFrontDeskController extends Controller
 
     public function checkIn(Request $request, Booking $booking)
     {
+        
         $validated = $request->validate([
             'rfid_uid' => ['required', 'string', 'max:255'],
         ]);

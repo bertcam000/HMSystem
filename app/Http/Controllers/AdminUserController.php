@@ -49,7 +49,7 @@ class AdminUserController extends Controller
 
     public function create()
     {
-        // return view('hms.admin.users.create');
+        return view('pages.admin.create');
     }
 
     public function store(Request $request)
@@ -79,7 +79,7 @@ class AdminUserController extends Controller
 
     public function edit(User $user)
     {
-        return view('hms.admin.users.edit', compact('user'));
+        return view('pages.admin.edit', compact('user'));
     }
 
     public function update(Request $request, User $user)

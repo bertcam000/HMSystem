@@ -111,7 +111,7 @@ class CheckInController extends Controller
 
             // FULL PAYMENT REQUIRED BEFORE CHECK-IN
             if (
-                in_array(strtolower($booking->status), ['reserved', 'confirmed']) &&
+                in_array(strtolower($booking->status), ['pending', 'reserved', 'confirmed']) &&
                 $balance <= 0
             ) {
                 if ($booking->rooms->isEmpty()) {
